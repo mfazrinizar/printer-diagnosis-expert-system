@@ -1,0 +1,4 @@
+.conda/
+*.csv
+*.pyc
+__pycache__/

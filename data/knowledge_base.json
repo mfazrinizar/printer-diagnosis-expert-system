@@ -1,0 +1,45 @@
+{
+  "symptoms": [
+    {"code": "B1", "description": "Printer tidak menyala"},
+    {"code": "B2", "description": "Lampu indikator printer berkedip terus"},
+    {"code": "B3", "description": "Printer tidak terdeteksi di komputer"},
+    {"code": "B4", "description": "Printer tidak bisa menarik kertas"},
+    {"code": "B5", "description": "Hasil cetak buram atau tidak jelas"},
+    {"code": "B6", "description": "Tinta tidak keluar sama sekali"},
+    {"code": "B7", "description": "Kertas sering macet (paper jam)"},
+    {"code": "B8", "description": "Printer mencetak garis-garis"},
+    {"code": "B9", "description": "Muncul pesan error pada layar / software printer"}
+  ],
+  "rules": [
+    {
+      "code": "A1",
+      "conditions": ["B1", "B2"],
+      "diagnosis": "Kerusakan pada power supply",
+      "solution": "Periksa kabel power dan adaptor printer. Jika rusak, ganti dengan yang baru sesuai spesifikasi."
+    },
+    {
+      "code": "A2",
+      "conditions": ["B3", "B9"],
+      "diagnosis": "Driver printer belum terinstal / rusak",
+      "solution": "Unduh dan instal ulang driver printer dari website resmi produsen."
+    },
+    {
+      "code": "A3",
+      "conditions": ["B5", "B6", "B8", "B9"],
+      "diagnosis": "Cartridge / tinta bermasalah",
+      "solution": "Ganti cartridge atau isi ulang tinta printer dengan tinta yang sesuai."
+    },
+    {
+      "code": "A4",
+      "conditions": ["B4", "B7"],
+      "diagnosis": "Roller atau mekanik penarik kertas rusak",
+      "solution": "Bersihkan roller dengan lap lembab. Jika aus, ganti roller dengan yang baru."
+    },
+    {
+      "code": "A5",
+      "conditions": ["B5", "B6", "B8"],
+      "diagnosis": "Head printer kotor atau rusak",
+      "solution": "Lakukan cleaning head melalui software printer. Jika masih bermasalah, bawa ke service center."
+    }
+  ]
+}
