@@ -397,10 +397,9 @@ def page_home():
 
     st.markdown("")
 
-    # Method Cards
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("""
+    # Method Cards -- side by side
+    st.markdown("""
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1rem;">
         <div class="method-card">
             <h3>Rule-Based Reasoning (RBR)</h3>
             <p>Menggunakan <strong>Forward Chaining</strong> untuk mencocokkan gejala yang dialami pengguna
@@ -409,16 +408,6 @@ def page_home():
             <span class="tag tag-primary">AND Logic</span>
             <span class="tag tag-primary">Exact Match</span></p>
         </div>
-        """, unsafe_allow_html=True)
-        if st.button("Mulai Diagnosis RBR", key="home_rbr", use_container_width=True):
-            st.session_state.page = "rbr"
-            st.session_state.rbr_answers = {}
-            st.session_state.rbr_step = 0
-            st.session_state.rbr_finished = False
-            st.rerun()
-
-    with col2:
-        st.markdown("""
         <div class="method-card">
             <h3>Case-Based Reasoning (CBR)</h3>
             <p>Menggunakan <strong>siklus Retrieve-Reuse-Revise-Retain</strong> untuk mencari kasus serupa
@@ -427,7 +416,18 @@ def page_home():
             <span class="tag tag-accent">Weighted Similarity</span>
             <span class="tag tag-accent">Case Library</span></p>
         </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
+
+    btn_col1, btn_col2 = st.columns(2)
+    with btn_col1:
+        if st.button("Mulai Diagnosis RBR", key="home_rbr", use_container_width=True):
+            st.session_state.page = "rbr"
+            st.session_state.rbr_answers = {}
+            st.session_state.rbr_step = 0
+            st.session_state.rbr_finished = False
+            st.rerun()
+    with btn_col2:
         if st.button("Mulai Diagnosis CBR", key="home_cbr", use_container_width=True):
             st.session_state.page = "cbr"
             st.session_state.cbr_selected = []
@@ -691,21 +691,18 @@ def page_cbr():
 
     selected_symptoms = []
 
-    for cat in categories:
-        cat_label = CATEGORY_MAP.get(cat, cat)
-        cat_symptoms = kb.get_symptoms_by_category(cat)
-
-        st.markdown(f"**{cat_label}**")
-        cols = st.columns(len(cat_symptoms) if len(cat_symptoms) <= 3 else 3)
-        for i, sym in enumerate(cat_symptoms):
-            with cols[i % len(cols)]:
-                checked = st.checkbox(
-                    f"{sym['code']}: {sym['description']}",
-                    key=f"cbr_sym_{sym['code']}",
-                    value=sym["code"] in st.session_state.cbr_selected
-                )
-                if checked:
-                    selected_symptoms.append(sym["code"])
+    all_symptoms = kb.get_symptoms()
+    cols = st.columns(3)
+    for i, sym in enumerate(all_symptoms):
+        cat_label = CATEGORY_MAP.get(sym.get("category", "other"), "Lainnya")
+        with cols[i % 3]:
+            checked = st.checkbox(
+                f"{sym['code']}: {sym['description']} [{cat_label}]",
+                key=f"cbr_sym_{sym['code']}",
+                value=sym["code"] in st.session_state.cbr_selected
+            )
+            if checked:
+                selected_symptoms.append(sym["code"])
 
     st.session_state.cbr_selected = selected_symptoms
 
