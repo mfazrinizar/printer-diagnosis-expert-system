@@ -67,8 +67,8 @@
       "severity": "high",
       "solution": "Periksa kabel power dan adaptor printer. Jika rusak, ganti dengan yang baru sesuai spesifikasi.",
       "references": [
-        "HP Support - Printer Won't Turn On (support.hp.com)",
-        "Canon Troubleshoot - Power Issues (support.canon.com)"
+        "https://support.hp.com/us-en/printer",
+        "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
       ]
     },
     {
@@ -82,8 +82,8 @@
       "severity": "medium",
       "solution": "Unduh dan instal ulang driver printer dari website resmi produsen. Pastikan versi driver sesuai dengan sistem operasi.",
       "references": [
-        "Microsoft Support - Fix Printer Connection and Printing Problems in Windows (support.microsoft.com)",
-        "HP Support - Download & Install Drivers (support.hp.com)"
+        "https://learn.microsoft.com/en-us/windows/win32/printdocs/printing-and-print-spooler-reference",
+        "https://support.hp.com/us-en/topic/printing-errors"
       ]
     },
     {
@@ -99,8 +99,8 @@
       "severity": "medium",
       "solution": "Ganti cartridge atau isi ulang tinta printer dengan tinta yang sesuai. Pastikan cartridge terpasang dengan benar.",
       "references": [
-        "Epson Support - Replacing Ink Cartridges (support.epson.net)",
-        "Brother Support - Ink & Toner (support.brother.com)"
+        "https://epson.com/Support/Printers/sh/s1",
+        "https://www.printertesting.com/"
       ]
     },
     {
@@ -114,8 +114,8 @@
       "severity": "high",
       "solution": "Bersihkan roller dengan lap lembab. Jika aus, ganti roller dengan yang baru. Pastikan kertas yang digunakan sesuai spesifikasi.",
       "references": [
-        "HP Support - Paper Jam Issues (support.hp.com)",
-        "Canon Support - Paper Feeding Problems (support.canon.com)"
+        "https://www.brother-usa.com/support",
+        "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
       ]
     },
     {
@@ -130,8 +130,8 @@
       "severity": "high",
       "solution": "Lakukan cleaning head melalui software printer. Jika masih bermasalah, bawa ke service center untuk penggantian head printer.",
       "references": [
-        "Epson Support - Print Head Cleaning (support.epson.net)",
-        "HP Support - Printhead Maintenance (support.hp.com)"
+        "https://www.printertesting.com/",
+        "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
       ]
     }
   ]

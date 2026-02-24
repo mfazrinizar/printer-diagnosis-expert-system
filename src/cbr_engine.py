@@ -202,7 +202,8 @@ class CBREngine:
             "severity": new_case.get("severity", "medium"),
             "outcome": new_case.get("outcome", "pending"),
             "date": datetime.now().strftime("%Y-%m-%d"),
-            "technician_notes": new_case.get("technician_notes", "")
+            "technician_notes": new_case.get("technician_notes", ""),
+            "references": new_case.get("references", [])
         }
 
         self._cases.append(case_entry)

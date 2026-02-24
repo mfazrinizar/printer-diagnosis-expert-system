@@ -159,7 +159,7 @@ class RBREngine:
                 "conditions_unmatched": list(conditions - matched),
                 "match_ratio": f"{len(matched)}/{len(conditions)}",
                 "fired": is_fired,
-                "status": "✅ FIRE" if is_fired else f"❌ TIDAK FIRE ({len(matched)}/{len(conditions)} terpenuhi)"
+                "status": "FIRE" if is_fired else f"TIDAK FIRE ({len(matched)}/{len(conditions)} terpenuhi)"
             }
             trace.append(step)
 

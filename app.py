@@ -5,12 +5,12 @@ from src.knowledge_base import KnowledgeBase
 from src.rbr_engine import RBREngine
 from src.cbr_engine import CBREngine
 
-
+# ──────────────────────────────────────────────
 # Page Config & CSS
-
+# ──────────────────────────────────────────────
 st.set_page_config(
     page_title="Sistem Pakar Diagnosis Printer",
-    page_icon="🖨️",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -152,11 +152,6 @@ div[data-testid="stSidebar"] .stMarkdown h3 {
     line-height: 1.6;
 }
 
-.method-icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
 .result-card {
     background: linear-gradient(145deg, #1e293b, #0f172a);
     border-left: 4px solid #6366f1;
@@ -165,31 +160,9 @@ div[data-testid="stSidebar"] .stMarkdown h3 {
     margin-bottom: 1rem;
 }
 
-.result-card-success {
-    border-left-color: #10b981;
-}
-
-.result-card-warning {
-    border-left-color: #f59e0b;
-}
-
-.result-card-danger {
-    border-left-color: #ef4444;
-}
-
-.similarity-bar {
-    background: #1e293b;
-    border-radius: 8px;
-    height: 8px;
-    overflow: hidden;
-    margin: 0.5rem 0;
-}
-
-.similarity-fill {
-    height: 100%;
-    border-radius: 8px;
-    transition: width 0.5s ease;
-}
+.result-card-success { border-left-color: #10b981; }
+.result-card-warning { border-left-color: #f59e0b; }
+.result-card-danger { border-left-color: #ef4444; }
 
 .tag {
     display: inline-block;
@@ -225,29 +198,6 @@ div[data-testid="stSidebar"] .stMarkdown h3 {
     opacity: 0.7;
 }
 
-.case-card {
-    background: linear-gradient(145deg, #1e293b, #0f172a);
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 1.25rem;
-    margin-bottom: 0.75rem;
-    transition: all 0.3s ease;
-}
-
-.case-card:hover {
-    border-color: #06b6d4;
-    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.1);
-}
-
-.section-header {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    color: #f1f5f9;
-    border-bottom: 2px solid #334155;
-    padding-bottom: 0.75rem;
-    margin-bottom: 1.25rem;
-}
-
 .info-box {
     background: rgba(99, 102, 241, 0.08);
     border: 1px solid rgba(99, 102, 241, 0.2);
@@ -256,20 +206,18 @@ div[data-testid="stSidebar"] .stMarkdown h3 {
     margin: 1rem 0;
 }
 
-.ref-list {
-    list-style: none;
-    padding: 0;
-    margin: 0.5rem 0 0 0;
-}
-
-.ref-list li {
-    padding: 0.3rem 0;
-    color: #94a3b8;
+.ref-link {
+    display: block;
+    color: #67e8f9;
+    text-decoration: none;
+    padding: 0.2rem 0;
     font-size: 0.85rem;
+    word-break: break-all;
 }
 
-.ref-list li::before {
-    content: '📖 ';
+.ref-link:hover {
+    color: #a5b4fc;
+    text-decoration: underline;
 }
 </style>
 """
@@ -277,9 +225,9 @@ div[data-testid="stSidebar"] .stMarkdown h3 {
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
-
+# ──────────────────────────────────────────────
 # Initialize Data
-
+# ──────────────────────────────────────────────
 @st.cache_resource
 def load_engines():
     base = Path(__file__).parent
@@ -312,33 +260,33 @@ def init_session():
 init_session()
 
 
-
+# ──────────────────────────────────────────────
 # Helpers
-
+# ──────────────────────────────────────────────
 SEVERITY_MAP = {
-    "high": ("🔴", "Tinggi", "tag-high"),
-    "medium": ("🟡", "Sedang", "tag-medium"),
-    "low": ("🟢", "Rendah", "tag-low"),
+    "high": ("Tinggi", "tag-high"),
+    "medium": ("Sedang", "tag-medium"),
+    "low": ("Rendah", "tag-low"),
 }
 
 CATEGORY_MAP = {
-    "power": ("⚡", "Power"),
-    "connectivity": ("🔌", "Konektivitas"),
-    "print_quality": ("🎨", "Kualitas Cetak"),
-    "mechanical": ("⚙️", "Mekanik"),
-    "software": ("💻", "Software"),
-    "other": ("❓", "Lainnya"),
+    "power": ("Power"),
+    "connectivity": ("Konektivitas"),
+    "print_quality": ("Kualitas Cetak"),
+    "mechanical": ("Mekanik"),
+    "software": ("Software"),
+    "other": ("Lainnya"),
 }
 
 
 def severity_tag(level: str) -> str:
-    icon, label, cls = SEVERITY_MAP.get(level, ("⚪", level, "tag-primary"))
-    return f'<span class="tag {cls}">{icon} {label}</span>'
+    label, cls = SEVERITY_MAP.get(level, (level, "tag-primary"))
+    return f'<span class="tag {cls}">{label}</span>'
 
 
 def category_tag(cat: str) -> str:
-    icon, label = CATEGORY_MAP.get(cat, ("❓", cat))
-    return f'<span class="tag tag-accent">{icon} {label}</span>'
+    label = CATEGORY_MAP.get(cat, cat)
+    return f'<span class="tag tag-accent">{label}</span>'
 
 
 def similarity_bar_html(value: float) -> str:
@@ -352,53 +300,67 @@ def similarity_bar_html(value: float) -> str:
     else:
         color = "linear-gradient(90deg, #ef4444, #dc2626)"
 
-    return f"""
-    <div style="display:flex;align-items:center;gap:0.75rem;">
-        <div style="flex:1;background:#1e293b;border-radius:8px;height:10px;overflow:hidden;">
-            <div style="width:{pct}%;height:100%;border-radius:8px;background:{color};transition:width 0.5s ease;"></div>
-        </div>
-        <span style="font-weight:700;color:#f1f5f9;font-size:0.95rem;min-width:50px;text-align:right;">{pct}%</span>
-    </div>
-    """
+    return (
+        '<div style="display:flex;align-items:center;gap:0.75rem;">'
+        '<div style="flex:1;background:#1e293b;border-radius:8px;height:10px;overflow:hidden;">'
+        f'<div style="width:{pct}%;height:100%;border-radius:8px;background:{color};transition:width 0.5s ease;"></div>'
+        '</div>'
+        f'<span style="font-weight:700;color:#f1f5f9;font-size:0.95rem;min-width:50px;text-align:right;">{pct}%</span>'
+        '</div>'
+    )
 
 
+def render_references_html(refs: list) -> str:
+    if not refs:
+        return ""
+    links = ""
+    for ref in refs:
+        links += f'<a class="ref-link" href="{ref}" target="_blank" rel="noopener noreferrer">{ref}</a>'
+    return (
+        '<div style="margin-top:0.5rem;padding:0.5rem 0.75rem;background:rgba(6,182,212,0.06);'
+        'border:1px solid rgba(6,182,212,0.15);border-radius:8px;">'
+        '<strong style="color:#94a3b8;font-size:0.8rem;">Referensi:</strong>'
+        f'{links}</div>'
+    )
 
+
+# ──────────────────────────────────────────────
 # Sidebar
-
+# ──────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 🖨️ Menu Navigasi")
+    st.markdown("## Menu Navigasi")
     st.markdown("---")
 
     menu_items = [
-        ("🏠", "Beranda", "home"),
-        ("📋", "RBR — Rule-Based", "rbr"),
-        ("📦", "CBR — Case-Based", "cbr"),
-        ("📚", "Basis Pengetahuan", "knowledge"),
-        ("🗂️", "Case Library", "cases"),
-        ("ℹ️", "Tentang Sistem", "about"),
+        ("Beranda", "home"),
+        ("RBR -- Rule-Based", "rbr"),
+        ("CBR -- Case-Based", "cbr"),
+        ("Basis Pengetahuan", "knowledge"),
+        ("Case Library", "cases"),
+        ("Tentang Sistem", "about"),
     ]
 
-    for icon, label, key in menu_items:
-        if st.button(f"{icon}  {label}", key=f"nav_{key}", use_container_width=True):
+    for label, key in menu_items:
+        if st.button(f"{label}", key=f"nav_{key}", use_container_width=True):
             st.session_state.page = key
             st.rerun()
 
     st.markdown("---")
 
     stats = cbr_engine.get_case_statistics()
-    st.markdown("### 📊 Ringkasan")
+    st.markdown("### Ringkasan")
     st.caption(f"**{len(kb.get_symptoms())}** Gejala terdaftar")
     st.caption(f"**{len(kb.get_rules())}** Aturan diagnosis")
     st.caption(f"**{stats.get('total_cases', 0)}** Kasus tersimpan")
 
 
-
+# ──────────────────────────────────────────────
 # PAGE: Home
-
+# ──────────────────────────────────────────────
 def page_home():
     st.markdown("""
     <div class="hero-banner">
-        <h1>🖨️ Sistem Pakar Diagnosis Printer</h1>
+        <h1>Sistem Pakar Diagnosis Printer</h1>
         <p>Sistem pakar berbasis pengetahuan untuk mendiagnosis kerusakan printer
         menggunakan dua metode penalaran: <strong>Rule-Based Reasoning (RBR)</strong>
         dan <strong>Case-Based Reasoning (CBR)</strong>.</p>
@@ -440,7 +402,6 @@ def page_home():
     with col1:
         st.markdown("""
         <div class="method-card">
-            <div class="method-icon">📋</div>
             <h3>Rule-Based Reasoning (RBR)</h3>
             <p>Menggunakan <strong>Forward Chaining</strong> untuk mencocokkan gejala yang dialami pengguna
             dengan aturan-aturan (IF-THEN rules) yang telah didefinisikan oleh pakar.</p>
@@ -449,7 +410,7 @@ def page_home():
             <span class="tag tag-primary">Exact Match</span></p>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("▶️  Mulai Diagnosis RBR", key="home_rbr", use_container_width=True):
+        if st.button("Mulai Diagnosis RBR", key="home_rbr", use_container_width=True):
             st.session_state.page = "rbr"
             st.session_state.rbr_answers = {}
             st.session_state.rbr_step = 0
@@ -459,7 +420,6 @@ def page_home():
     with col2:
         st.markdown("""
         <div class="method-card">
-            <div class="method-icon">📦</div>
             <h3>Case-Based Reasoning (CBR)</h3>
             <p>Menggunakan <strong>siklus Retrieve-Reuse-Revise-Retain</strong> untuk mencari kasus serupa
             di case library dan mengadaptasi solusinya untuk masalah saat ini.</p>
@@ -468,7 +428,7 @@ def page_home():
             <span class="tag tag-accent">Case Library</span></p>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("▶️  Mulai Diagnosis CBR", key="home_cbr", use_container_width=True):
+        if st.button("Mulai Diagnosis CBR", key="home_cbr", use_container_width=True):
             st.session_state.page = "cbr"
             st.session_state.cbr_selected = []
             st.session_state.cbr_results = None
@@ -480,26 +440,26 @@ def page_home():
     # References
     st.markdown("""
     <div class="info-box">
-    <h4 style="margin-top:0;">📖 Referensi Utama</h4>
-    <ul class="ref-list">
-        <li>Turban, E., Aronson, J.E., & Liang, T.P. (2005). <em>Decision Support Systems and Intelligent Systems</em>. Pearson.</li>
-        <li>Giarratano, J.C., & Riley, G.D. (2005). <em>Expert Systems: Principles and Programming</em>. Thomson.</li>
-        <li>Aamodt, A., & Plaza, E. (1994). Case-Based Reasoning: Foundational Issues. <em>AI Communications</em>, 7(1), 39-59.</li>
-        <li>Kolodner, J. (1993). <em>Case-Based Reasoning</em>. Morgan Kaufmann.</li>
-        <li>Watson, I. (1997). <em>Applying Case-Based Reasoning</em>. Morgan Kaufmann.</li>
+    <h4 style="margin-top:0;">Referensi Utama</h4>
+    <ul style="list-style:none;padding:0;margin:0.5rem 0 0 0;">
+        <li style="padding:0.3rem 0;color:#94a3b8;font-size:0.85rem;">Turban, E., Aronson, J.E., & Liang, T.P. (2005). <em>Decision Support Systems and Intelligent Systems</em>. Pearson.</li>
+        <li style="padding:0.3rem 0;color:#94a3b8;font-size:0.85rem;">Giarratano, J.C., & Riley, G.D. (2005). <em>Expert Systems: Principles and Programming</em>. Thomson.</li>
+        <li style="padding:0.3rem 0;color:#94a3b8;font-size:0.85rem;">Aamodt, A., & Plaza, E. (1994). Case-Based Reasoning: Foundational Issues. <em>AI Communications</em>, 7(1), 39-59.</li>
+        <li style="padding:0.3rem 0;color:#94a3b8;font-size:0.85rem;">Kolodner, J. (1993). <em>Case-Based Reasoning</em>. Morgan Kaufmann.</li>
+        <li style="padding:0.3rem 0;color:#94a3b8;font-size:0.85rem;">Watson, I. (1997). <em>Applying Case-Based Reasoning</em>. Morgan Kaufmann.</li>
     </ul>
     </div>
     """, unsafe_allow_html=True)
 
 
-
+# ──────────────────────────────────────────────
 # PAGE: RBR Diagnosis
-
+# ──────────────────────────────────────────────
 def page_rbr():
     st.markdown("""
     <div class="hero-banner" style="background: linear-gradient(135deg, #312e81, #4338ca, #6366f1);">
-        <h1>📋 Rule-Based Reasoning (RBR)</h1>
-        <p>Diagnosis menggunakan metode <strong>Forward Chaining</strong> — menjawab pertanyaan gejala
+        <h1>Rule-Based Reasoning (RBR)</h1>
+        <p>Diagnosis menggunakan metode <strong>Forward Chaining</strong> -- menjawab pertanyaan gejala
         satu per satu, lalu sistem akan mencocokkan dengan aturan diagnosis yang ada.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -519,37 +479,37 @@ def page_rbr():
 
     # Show previous answers as compact summary
     if step > 0:
-        with st.expander(f"📝 Jawaban sebelumnya ({step} pertanyaan)", expanded=False):
+        with st.expander(f"Jawaban sebelumnya ({step} pertanyaan)", expanded=False):
             for i in range(step):
                 sym = symptoms[i]
                 code = sym["code"]
                 ans = st.session_state.rbr_answers.get(code)
                 if ans is not None:
-                    icon = "✅" if ans else "❌"
+                    icon = "[YA]" if ans else "[TIDAK]"
                     st.caption(f"{icon} **{code}**: {sym['description']}")
 
     # Current question
     if step < total:
         current = symptoms[step]
-        cat_icon, cat_label = CATEGORY_MAP.get(current.get("category", "other"), ("❓", "Lainnya"))
+        cat_label = CATEGORY_MAP.get(current.get("category", "other"), "Lainnya")
 
-        st.markdown(f"""
-        <div style="background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid #334155;
-                    border-radius: 16px; padding: 2rem; margin: 1rem 0;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <span style="color: #94a3b8; font-size: 0.85rem;">Pertanyaan {step + 1} dari {total}</span>
-                <span class="tag tag-accent">{cat_icon} {cat_label}</span>
-            </div>
-            <h3 style="color: #f1f5f9; margin: 0 0 0.5rem 0;">Apakah printer Anda mengalami gejala berikut?</h3>
-            <p style="color: #c7d2fe; font-size: 1.15rem; font-weight: 600;">
-                {current['code']}: {current['description']}
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            '<div style="background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid #334155;'
+            'border-radius: 16px; padding: 2rem; margin: 1rem 0;">'
+            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">'
+            f'<span style="color: #94a3b8; font-size: 0.85rem;">Pertanyaan {step + 1} dari {total}</span>'
+            f'<span class="tag tag-accent">{cat_label}</span>'
+            '</div>'
+            '<h3 style="color: #f1f5f9; margin: 0 0 0.5rem 0;">Apakah printer Anda mengalami gejala berikut?</h3>'
+            f'<p style="color: #c7d2fe; font-size: 1.15rem; font-weight: 600;">'
+            f'{current["code"]}: {current["description"]}'
+            '</p></div>',
+            unsafe_allow_html=True
+        )
 
         col1, col2, col3 = st.columns([1, 1, 2])
         with col1:
-            if st.button("✅ Ya", key=f"rbr_yes_{step}", use_container_width=True):
+            if st.button("Ya", key=f"rbr_yes_{step}", use_container_width=True):
                 st.session_state.rbr_answers[current["code"]] = True
                 if step + 1 < total:
                     st.session_state.rbr_step += 1
@@ -557,7 +517,7 @@ def page_rbr():
                     st.session_state.rbr_finished = True
                 st.rerun()
         with col2:
-            if st.button("❌ Tidak", key=f"rbr_no_{step}", use_container_width=True):
+            if st.button("Tidak", key=f"rbr_no_{step}", use_container_width=True):
                 st.session_state.rbr_answers[current["code"]] = False
                 if step + 1 < total:
                     st.session_state.rbr_step += 1
@@ -570,13 +530,13 @@ def page_rbr():
         nav1, nav2 = st.columns([1, 3])
         with nav1:
             if step > 0:
-                if st.button("⬅️ Kembali", key="rbr_back", use_container_width=True):
+                if st.button("Kembali", key="rbr_back", use_container_width=True):
                     st.session_state.rbr_step -= 1
                     st.rerun()
 
     # Reset
     st.markdown("---")
-    if st.button("🔄 Reset Diagnosis", key="rbr_reset"):
+    if st.button("Reset Diagnosis", key="rbr_reset"):
         st.session_state.rbr_answers = {}
         st.session_state.rbr_step = 0
         st.session_state.rbr_finished = False
@@ -588,58 +548,55 @@ def render_rbr_results():
     symptoms = kb.get_symptoms()
 
     # Summary
-    st.markdown(f"""
-    <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2);
-                border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">
-        <h4 style="margin-top:0; color: #a5b4fc;">📊 Ringkasan Input</h4>
-        <p style="color: #94a3b8;">Gejala yang dialami: <strong style="color:#f1f5f9;">{len(selected)}</strong>
-        dari {len(st.session_state.rbr_answers)} gejala yang ditanyakan</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        '<div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2);'
+        'border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">'
+        '<h4 style="margin-top:0; color: #a5b4fc;">Ringkasan Input</h4>'
+        f'<p style="color: #94a3b8;">Gejala yang dialami: <strong style="color:#f1f5f9;">{len(selected)}</strong>'
+        f' dari {len(st.session_state.rbr_answers)} gejala yang ditanyakan</p>'
+        '</div>',
+        unsafe_allow_html=True
+    )
 
     if selected:
-        with st.expander("🔍 Gejala yang dipilih", expanded=True):
+        with st.expander("Gejala yang dipilih", expanded=True):
             for code in selected:
                 sym = kb.get_symptom_by_code(code)
                 if sym:
-                    cat_icon, cat_label = CATEGORY_MAP.get(sym.get("category", "other"), ("❓", "Lainnya"))
                     st.markdown(f"- **{code}**: {sym['description']} {category_tag(sym.get('category', 'other'))}", unsafe_allow_html=True)
 
     # Forward Chaining results
-    st.markdown("### 🎯 Hasil Diagnosis (Forward Chaining)")
+    st.markdown("### Hasil Diagnosis (Forward Chaining)")
 
     exact_results = rbr_engine.forward_chaining(selected)
 
     if exact_results:
         for r in exact_results:
-            sev_icon, sev_label, sev_cls = SEVERITY_MAP.get(r["severity"], ("⚪", "N/A", "tag-primary"))
-            st.markdown(f"""
-            <div class="result-card result-card-{'danger' if r['severity'] == 'high' else 'warning' if r['severity'] == 'medium' else 'success'}">
-                <div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:0.5rem;">
-                    <div>
-                        <h3 style="color: #f1f5f9; margin:0 0 0.25rem 0;">{r['diagnosis']}</h3>
-                        <span style="color: #94a3b8; font-size: 0.85rem;">Kode: {r['code']}</span>
-                    </div>
-                    <div>
-                        {severity_tag(r['severity'])}
-                        {category_tag(r['category'])}
-                    </div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+            border_cls = 'result-card-danger' if r['severity'] == 'high' else ('result-card-warning' if r['severity'] == 'medium' else 'result-card-success')
+            st.markdown(
+                f'<div class="result-card {border_cls}">'
+                '<div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:0.5rem;">'
+                '<div>'
+                f'<h3 style="color: #f1f5f9; margin:0 0 0.25rem 0;">{r["diagnosis"]}</h3>'
+                f'<span style="color: #94a3b8; font-size: 0.85rem;">Kode: {r["code"]}</span>'
+                '</div>'
+                f'<div>{severity_tag(r["severity"])} {category_tag(r["category"])}</div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
 
             col_sol, col_cond = st.columns([3, 2])
             with col_sol:
-                st.info(f"**💡 Solusi:** {r['solution']}")
+                st.info(f"**Solusi:** {r['solution']}")
             with col_cond:
-                st.success("**✅ Kondisi terpenuhi:**\n" + "\n".join(
+                st.success("**Kondisi terpenuhi:**\n" + "\n".join(
                     [f"- {d['code']}: {d['description']}" for d in r["matched_details"]]
                 ))
 
             if r.get("references"):
-                with st.expander(f"📖 Referensi ({len(r['references'])})"):
+                with st.expander(f"Referensi ({len(r['references'])})"):
                     for ref in r["references"]:
-                        st.caption(f"• {ref}")
+                        st.markdown(f"[{ref}]({ref})")
     else:
         st.warning("Tidak ada diagnosis yang **100% cocok** dengan gejala yang dipilih.")
 
@@ -647,7 +604,7 @@ def render_rbr_results():
     if selected:
         partial_results = rbr_engine.partial_matching(selected)
         if partial_results:
-            st.markdown("### 🔎 Kemungkinan Diagnosis (Partial Match)")
+            st.markdown("### Kemungkinan Diagnosis (Partial Match)")
             for r in partial_results:
                 confidence_pct = int(r["confidence"] * 100)
                 partial_card = (
@@ -665,47 +622,49 @@ def render_rbr_results():
                 )
                 st.markdown(partial_card, unsafe_allow_html=True)
 
-                with st.expander(f"Detail — {r['code']}: {r['diagnosis']}"):
+                with st.expander(f"Detail -- {r['code']}: {r['diagnosis']}"):
                     c1, c2 = st.columns(2)
                     with c1:
-                        st.markdown("**✅ Kondisi terpenuhi:**")
+                        st.markdown("**Kondisi terpenuhi:**")
                         for d in r["matched_details"]:
-                            st.caption(f"• {d['code']}: {d['description']}")
+                            st.caption(f"- {d['code']}: {d['description']}")
                     with c2:
-                        st.markdown("**❌ Kondisi belum terpenuhi:**")
+                        st.markdown("**Kondisi belum terpenuhi:**")
                         for d in r["unmatched_details"]:
-                            st.caption(f"• {d['code']}: {d['description']}")
+                            st.caption(f"- {d['code']}: {d['description']}")
 
     # Inference Trace
-    st.markdown("### 🧠 Jejak Inferensi (Inference Trace)")
+    st.markdown("### Jejak Inferensi (Inference Trace)")
     with st.expander("Lihat detail proses Forward Chaining", expanded=False):
         trace = rbr_engine.get_inference_trace(selected)
         for t in trace:
             cls = "trace-fired" if t["fired"] else "trace-not-fired"
-            st.markdown(f"""
-            <div class="trace-step {cls}">
-                <strong>Langkah {t['step']}</strong> — Rule {t['rule_code']}: {t['rule_diagnosis']}<br/>
-                <span style="color: #94a3b8;">Kondisi: {', '.join(t['conditions_required'])} →
-                Terpenuhi: {t['match_ratio']} → {t['status']}</span>
-            </div>
-            """, unsafe_allow_html=True)
+            status_text = "FIRE" if t["fired"] else f'TIDAK FIRE ({t["match_ratio"]} terpenuhi)'
+            st.markdown(
+                f'<div class="trace-step {cls}">'
+                f'<strong>Langkah {t["step"]}</strong> -- Rule {t["rule_code"]}: {t["rule_diagnosis"]}<br/>'
+                f'<span style="color: #94a3b8;">Kondisi: {", ".join(t["conditions_required"])} | '
+                f'Terpenuhi: {t["match_ratio"]} | {status_text}</span>'
+                '</div>',
+                unsafe_allow_html=True
+            )
 
     st.markdown("---")
-    if st.button("🔄 Mulai Diagnosis Baru", type="primary", key="rbr_restart"):
+    if st.button("Mulai Diagnosis Baru", type="primary", key="rbr_restart"):
         st.session_state.rbr_answers = {}
         st.session_state.rbr_step = 0
         st.session_state.rbr_finished = False
         st.rerun()
 
 
-
+# ──────────────────────────────────────────────
 # PAGE: CBR Diagnosis
-
+# ──────────────────────────────────────────────
 def page_cbr():
     st.markdown("""
     <div class="hero-banner" style="background: linear-gradient(135deg, #134e4a, #0f766e, #06b6d4);">
-        <h1>📦 Case-Based Reasoning (CBR)</h1>
-        <p>Diagnosis menggunakan <strong>siklus Retrieve-Reuse-Revise-Retain</strong> —
+        <h1>Case-Based Reasoning (CBR)</h1>
+        <p>Diagnosis menggunakan <strong>siklus Retrieve-Reuse-Revise-Retain</strong> --
         mencari kasus serupa di case library menggunakan <strong>Weighted Nearest Neighbor</strong>.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -715,16 +674,16 @@ def page_cbr():
     <div style="background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid #334155;
                 border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; text-align: center;">
         <span style="color: #67e8f9; font-weight: 700; font-size: 1rem;">
-            🔍 Retrieve → 🔄 Reuse → ✏️ Revise → 💾 Retain
+            Retrieve &rarr; Reuse &rarr; Revise &rarr; Retain
         </span>
         <p style="color: #94a3b8; font-size: 0.8rem; margin: 0.5rem 0 0 0;">
-            Siklus CBR (Aamodt & Plaza, 1994)
+            Siklus CBR (Aamodt &amp; Plaza, 1994)
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     # Step 1: Select symptoms
-    st.markdown("### 🔍 Step 1: RETRIEVE — Pilih Gejala")
+    st.markdown("### Step 1: RETRIEVE -- Pilih Gejala")
     st.caption("Pilih gejala yang dialami printer Anda. Sistem akan mencari kasus serupa di case library.")
 
     symptoms = kb.get_symptoms()
@@ -733,10 +692,10 @@ def page_cbr():
     selected_symptoms = []
 
     for cat in categories:
-        cat_icon, cat_label = CATEGORY_MAP.get(cat, ("❓", cat))
+        cat_label = CATEGORY_MAP.get(cat, cat)
         cat_symptoms = kb.get_symptoms_by_category(cat)
 
-        st.markdown(f"**{cat_icon} {cat_label}**")
+        st.markdown(f"**{cat_label}**")
         cols = st.columns(len(cat_symptoms) if len(cat_symptoms) <= 3 else 3)
         for i, sym in enumerate(cat_symptoms):
             with cols[i % len(cols)]:
@@ -753,7 +712,7 @@ def page_cbr():
     st.markdown("---")
 
     if selected_symptoms:
-        if st.button("🔎 Cari Kasus Serupa", type="primary", use_container_width=True, key="cbr_search"):
+        if st.button("Cari Kasus Serupa", type="primary", use_container_width=True, key="cbr_search"):
             results = cbr_engine.retrieve(selected_symptoms, top_k=5)
             proposed = cbr_engine.reuse(results)
             st.session_state.cbr_results = results
@@ -772,7 +731,7 @@ def render_cbr_results():
     proposed = st.session_state.cbr_proposed
     selected = st.session_state.cbr_selected
 
-    st.markdown("### 🔄 Step 2: REUSE — Hasil Pencarian Kasus")
+    st.markdown("### Step 2: REUSE -- Hasil Pencarian Kasus")
 
     if not results:
         st.warning("Tidak ditemukan kasus yang cukup mirip di case library. "
@@ -783,7 +742,7 @@ def render_cbr_results():
 
     # Best match / Proposed solution
     if proposed:
-        st.markdown("#### 💡 Solusi yang Diusulkan (dari kasus paling mirip)")
+        st.markdown("#### Solusi yang Diusulkan (dari kasus paling mirip)")
 
         proposed_card = (
             '<div class="result-card result-card-success">'
@@ -805,33 +764,40 @@ def render_cbr_results():
         )
         st.markdown(proposed_card, unsafe_allow_html=True)
 
-        st.info(f"**💡 Solusi:** {proposed['proposed_solution']}")
-        st.caption(f"📝 **Catatan Adaptasi:** {proposed['adaptation_notes']}")
+        st.info(f"**Solusi:** {proposed['proposed_solution']}")
+        st.caption(f"**Catatan Adaptasi:** {proposed['adaptation_notes']}")
 
     # All retrieved cases
-    st.markdown("#### 📋 Kasus yang Ditemukan")
+    st.markdown("#### Kasus yang Ditemukan")
     for i, case in enumerate(results):
         sim_pct = int(case["similarity"] * 100)
         with st.expander(
-            f"#{i+1} — {case['title']} (Similarity: {sim_pct}%)",
+            f"#{i+1} -- {case['title']} (Similarity: {sim_pct}%)",
             expanded=(i == 0)
         ):
             c1, c2 = st.columns([2, 1])
             with c1:
-                st.markdown(f"**📝 Deskripsi:** {case['description']}")
-                st.markdown(f"**🔍 Diagnosis:** {case['diagnosis']}")
-                st.markdown(f"**💡 Solusi:** {case['solution']}")
+                st.markdown(f"**Deskripsi:** {case['description']}")
+                st.markdown(f"**Diagnosis:** {case['diagnosis']}")
+                st.markdown(f"**Solusi:** {case['solution']}")
                 if case.get("technician_notes"):
-                    st.caption(f"🔧 Catatan Teknisi: {case['technician_notes']}")
+                    st.caption(f"Catatan Teknisi: {case['technician_notes']}")
             with c2:
                 st.markdown(f"**ID:** `{case['case_id']}`")
-                st.markdown(f"**Printer:** {case.get('brand', 'N/A')} — {case.get('printer_type', 'N/A')}")
+                st.markdown(f"**Printer:** {case.get('brand', 'N/A')} -- {case.get('printer_type', 'N/A')}")
                 st.markdown(f"**Tanggal:** {case.get('date', 'N/A')}")
                 st.markdown(f"**Outcome:** {case.get('outcome', 'N/A')}")
                 st.markdown(severity_tag(case.get("severity", "medium")), unsafe_allow_html=True)
 
+            # References (clickable links)
+            case_refs = case.get("references", [])
+            if case_refs:
+                st.markdown("**Referensi:**")
+                for ref in case_refs:
+                    st.markdown(f"- [{ref}]({ref})")
+
             # Similarity breakdown
-            st.markdown("**📊 Detail Perhitungan Similarity (Weighted Nearest Neighbor):**")
+            st.markdown("**Detail Perhitungan Similarity (Weighted Nearest Neighbor):**")
             breakdown = cbr_engine.get_similarity_breakdown(selected, case)
 
             bd_data = []
@@ -839,32 +805,31 @@ def render_cbr_results():
                 bd_data.append({
                     "Kode": b["code"],
                     "Gejala": b["description"],
-                    "Bobot (wᵢ)": b["weight"],
-                    "Kasus Baru": "✅" if b["in_new_case"] else "❌",
-                    "Kasus Lama": "✅" if b["in_old_case"] else "❌",
-                    "Match": "✅" if b["matched"] else "❌",
+                    "Bobot (wi)": b["weight"],
+                    "Kasus Baru": "V" if b["in_new_case"] else "X",
+                    "Kasus Lama": "V" if b["in_old_case"] else "X",
+                    "Match": "V" if b["matched"] else "X",
                     "Kontribusi": f"{b['contribution']:.4f}"
                 })
             st.dataframe(bd_data, use_container_width=True, hide_index=True)
 
             total_sim = case["similarity"]
-            st.markdown(f"""
-            <div style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.2);
-                        border-radius: 8px; padding: 0.75rem; margin-top: 0.5rem;">
-                <strong style="color: #67e8f9;">Formula:</strong>
-                <span style="color: #e2e8f0;">
-                    Similarity = Σ(wᵢ × matchᵢ) / Σwᵢ = <strong>{total_sim:.4f}</strong> ({sim_pct}%)
-                </span>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(
+                '<div style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.2);'
+                'border-radius: 8px; padding: 0.75rem; margin-top: 0.5rem;">'
+                '<strong style="color: #67e8f9;">Formula:</strong>'
+                f'<span style="color: #e2e8f0;"> Similarity = Sum(wi x match_i) / Sum(wi) = '
+                f'<strong>{total_sim:.4f}</strong> ({sim_pct}%)</span></div>',
+                unsafe_allow_html=True
+            )
 
     # Step 3: Revise & Retain
     st.markdown("---")
-    st.markdown("### ✏️ Step 3: REVISE — Evaluasi & Penyesuaian")
+    st.markdown("### Step 3: REVISE -- Evaluasi & Penyesuaian")
     st.caption("Apakah solusi yang diusulkan sesuai? Anda bisa menyesuaikan diagnosis dan solusi sebelum menyimpan kasus baru.")
 
     with st.form("cbr_retain_form"):
-        st.markdown("### 💾 Step 4: RETAIN — Simpan Kasus Baru")
+        st.markdown("### Step 4: RETAIN -- Simpan Kasus Baru")
 
         new_title = st.text_input("Judul Kasus", value="", placeholder="Contoh: Printer HP tidak menyala setelah mati lampu")
         new_desc = st.text_area("Deskripsi Kasus", value="", placeholder="Jelaskan kondisi printer secara detail...")
@@ -884,6 +849,9 @@ def render_cbr_results():
             value=proposed["proposed_solution"] if proposed else ""
         )
 
+        new_ref1 = st.text_input("URL Referensi 1 (opsional)", value="", placeholder="https://...")
+        new_ref2 = st.text_input("URL Referensi 2 (opsional)", value="", placeholder="https://...")
+
         col_s1, col_s2 = st.columns(2)
         with col_s1:
             new_severity = st.selectbox("Tingkat Keparahan", ["low", "medium", "high"], index=1)
@@ -892,10 +860,11 @@ def render_cbr_results():
 
         new_notes = st.text_area("Catatan Teknisi", placeholder="Catatan tambahan...")
 
-        submitted = st.form_submit_button("💾 Simpan Kasus Baru", use_container_width=True)
+        submitted = st.form_submit_button("Simpan Kasus Baru", use_container_width=True)
 
         if submitted:
             if new_title and new_diagnosis and new_solution:
+                new_refs = [r for r in [new_ref1.strip(), new_ref2.strip()] if r]
                 new_case = {
                     "title": new_title,
                     "description": new_desc,
@@ -906,68 +875,69 @@ def render_cbr_results():
                     "solution": new_solution,
                     "severity": new_severity,
                     "outcome": new_outcome,
-                    "technician_notes": new_notes
+                    "technician_notes": new_notes,
+                    "references": new_refs
                 }
                 case_id = cbr_engine.retain(new_case)
-                st.success(f"✅ Kasus baru berhasil disimpan dengan ID: **{case_id}**")
+                st.success(f"Kasus baru berhasil disimpan dengan ID: **{case_id}**")
                 st.cache_resource.clear()
             else:
                 st.error("Mohon isi Judul, Diagnosis, dan Solusi terlebih dahulu.")
 
 
-
+# ──────────────────────────────────────────────
 # PAGE: Knowledge Base
-
+# ──────────────────────────────────────────────
 def page_knowledge():
     st.markdown("""
     <div class="hero-banner" style="background: linear-gradient(135deg, #581c87, #7e22ce, #a855f7);">
-        <h1>📚 Basis Pengetahuan</h1>
+        <h1>Basis Pengetahuan</h1>
         <p>Daftar lengkap gejala dan aturan diagnosis yang digunakan oleh
         metode <strong>Rule-Based Reasoning</strong>.</p>
     </div>
     """, unsafe_allow_html=True)
 
-    tab_symptoms, tab_rules = st.tabs(["🔍 Daftar Gejala", "📋 Aturan Diagnosis (Rules)"])
+    tab_symptoms, tab_rules = st.tabs(["Daftar Gejala", "Aturan Diagnosis (Rules)"])
 
     with tab_symptoms:
-        st.markdown("#### 🔍 Tabel Gejala")
+        st.markdown("#### Tabel Gejala")
         symptoms_data = []
         for s in kb.get_symptoms():
-            cat_icon, cat_label = CATEGORY_MAP.get(s.get("category", "other"), ("❓", "Lainnya"))
+            cat_label = CATEGORY_MAP.get(s.get("category", "other"), "Lainnya")
             symptoms_data.append({
                 "Kode": s["code"],
                 "Gejala": s["description"],
-                "Kategori": f"{cat_icon} {cat_label}",
+                "Kategori": cat_label,
                 "Bobot": s.get("weight", 0.5)
             })
         st.dataframe(symptoms_data, use_container_width=True, hide_index=True)
 
     with tab_rules:
-        st.markdown("#### 📋 Tabel Aturan Diagnosis (IF-THEN)")
+        st.markdown("#### Tabel Aturan Diagnosis (IF-THEN)")
         for rule in kb.get_rules():
             sev = rule.get("severity", "medium")
-            sev_icon, sev_label, _ = SEVERITY_MAP.get(sev, ("⚪", "N/A", ""))
+            sev_label, _ = SEVERITY_MAP.get(sev, ("N/A", ""))
 
-            with st.expander(f"**{rule['code']}**: {rule['diagnosis']} {sev_icon}"):
+            with st.expander(f"**{rule['code']}**: {rule['diagnosis']} [{sev_label}]"):
                 st.markdown(f"**IF** " + " **AND** ".join(
                     [f"`{c}` ({kb.get_symptom_by_code(c)['description'] if kb.get_symptom_by_code(c) else c})"
                      for c in rule["conditions"]]
                 ) + f"\n\n**THEN** {rule['diagnosis']}")
                 st.info(f"**Solusi:** {rule['solution']}")
-                st.markdown(f"**Severity:** {severity_tag(sev)} &nbsp; **Kategori:** {category_tag(rule.get('category', 'other'))}", unsafe_allow_html=True)
+                st.markdown(f"**Severity:** {severity_tag(sev)} | **Kategori:** {category_tag(rule.get('category', 'other'))}", unsafe_allow_html=True)
                 if rule.get("references"):
                     st.markdown("**Referensi:**")
                     for ref in rule["references"]:
-                        st.caption(f"📖 {ref}")
+                        st.markdown(f"- [{ref}]({ref})")
 
 
-
+# ──────────────────────────────────────────────
 # PAGE: Case Library
-
+# ──────────────────────────────────────────────
 def page_cases():
     st.markdown("""
     <div class="hero-banner" style="background: linear-gradient(135deg, #713f12, #a16207, #eab308);">
-        <h1>🗂️ Case Library</h1>
+        <h1>Case Library</h1>
         <p>Database kasus-kasus diagnosis printer yang pernah ditangani.
         Digunakan sebagai referensi oleh metode <strong>Case-Based Reasoning</strong>.</p>
     </div>
@@ -1006,36 +976,43 @@ def page_cases():
 
     for case in filtered:
         sev = case.get("severity", "medium")
-        with st.expander(f"**{case['case_id']}** — {case['title']}"):
+        with st.expander(f"**{case['case_id']}** -- {case['title']}"):
             c1, c2 = st.columns([3, 1])
             with c1:
-                st.markdown(f"**📝 Deskripsi:** {case['description']}")
-                st.markdown(f"**🔍 Diagnosis:** {case['diagnosis']}")
-                st.markdown(f"**💡 Solusi:** {case['solution']}")
+                st.markdown(f"**Deskripsi:** {case['description']}")
+                st.markdown(f"**Diagnosis:** {case['diagnosis']}")
+                st.markdown(f"**Solusi:** {case['solution']}")
                 st.markdown(f"**Gejala:** {', '.join(case.get('symptoms', []))}")
                 if case.get("technician_notes"):
-                    st.caption(f"🔧 Catatan: {case['technician_notes']}")
+                    st.caption(f"Catatan: {case['technician_notes']}")
             with c2:
                 st.markdown(f"**Printer:** {case.get('brand', 'N/A')} - {case.get('printer_type', 'N/A')}")
                 st.markdown(f"**Tanggal:** {case.get('date', 'N/A')}")
                 st.markdown(f"**Outcome:** {case.get('outcome', 'N/A')}")
                 st.markdown(severity_tag(sev), unsafe_allow_html=True)
 
+            # Clickable references
+            case_refs = case.get("references", [])
+            if case_refs:
+                st.markdown("**Referensi:**")
+                for ref in case_refs:
+                    st.markdown(f"- [{ref}]({ref})")
 
 
+# ──────────────────────────────────────────────
 # PAGE: About
-
+# ──────────────────────────────────────────────
 def page_about():
     st.markdown("""
     <div class="hero-banner" style="background: linear-gradient(135deg, #1e293b, #334155, #475569);">
-        <h1>ℹ️ Tentang Sistem</h1>
+        <h1>Tentang Sistem</h1>
         <p>Informasi detail tentang arsitektur, metode, dan referensi yang digunakan
         dalam sistem pakar diagnosis printer ini.</p>
     </div>
     """, unsafe_allow_html=True)
 
     tab_arch, tab_rbr, tab_cbr, tab_ref = st.tabs([
-        "🏗️ Arsitektur", "📋 Metode RBR", "📦 Metode CBR", "📖 Referensi"
+        "Arsitektur", "Metode RBR", "Metode CBR", "Referensi"
     ])
 
     with tab_arch:
@@ -1055,16 +1032,16 @@ def page_about():
         #### Alur Sistem
         ```
         User Input (Gejala)
-            │
-            ├──→ RBR Engine ──→ Forward Chaining ──→ Rule Matching ──→ Diagnosis
-            │
-            └──→ CBR Engine ──→ Retrieve (Similarity) ──→ Reuse ──→ Revise ──→ Retain
+            |
+            +---> RBR Engine ---> Forward Chaining ---> Rule Matching ---> Diagnosis
+            |
+            +---> CBR Engine ---> Retrieve (Similarity) ---> Reuse ---> Revise ---> Retain
         ```
 
         #### Teknologi
-        - **Python 3.10+** — Bahasa pemrograman utama
-        - **Streamlit** — Framework antarmuka pengguna
-        - **JSON** — Format penyimpanan knowledge base dan case library
+        - **Python 3.10+** -- Bahasa pemrograman utama
+        - **Streamlit** -- Framework antarmuka pengguna
+        - **JSON** -- Format penyimpanan knowledge base dan case library
         """)
 
     with tab_rbr:
@@ -1079,10 +1056,10 @@ def page_about():
 
         #### Metode: Forward Chaining
         Forward chaining (data-driven reasoning) bekerja dengan cara:
-        1. **Kumpulkan fakta** — User menjawab pertanyaan tentang gejala
-        2. **Cocokkan aturan** — Sistem memeriksa setiap rule apakah semua kondisi (antecedent) terpenuhi
-        3. **Fire rule** — Jika semua kondisi terpenuhi, rule "terpicu" dan diagnosis dihasilkan
-        4. **Ulangi** — Proses berlanjut untuk semua rule yang ada
+        1. **Kumpulkan fakta** -- User menjawab pertanyaan tentang gejala
+        2. **Cocokkan aturan** -- Sistem memeriksa setiap rule apakah semua kondisi (antecedent) terpenuhi
+        3. **Fire rule** -- Jika semua kondisi terpenuhi, rule "terpicu" dan diagnosis dihasilkan
+        4. **Ulangi** -- Proses berlanjut untuk semua rule yang ada
 
         #### Representasi Aturan (AND Logic)
         ```
@@ -1109,19 +1086,19 @@ def page_about():
         yang pernah diselesaikan sebelumnya (Aamodt & Plaza, 1994).
 
         #### Siklus CBR (4R)
-        1. **RETRIEVE** — Mengambil kasus-kasus paling mirip dari case library
-        2. **REUSE** — Mengadaptasi solusi dari kasus terdekat
-        3. **REVISE** — Mengevaluasi dan menyesuaikan solusi
-        4. **RETAIN** — Menyimpan kasus baru ke case library
+        1. **RETRIEVE** -- Mengambil kasus-kasus paling mirip dari case library
+        2. **REUSE** -- Mengadaptasi solusi dari kasus terdekat
+        3. **REVISE** -- Mengevaluasi dan menyesuaikan solusi
+        4. **RETAIN** -- Menyimpan kasus baru ke case library
 
         #### Metode Similarity: Weighted Nearest Neighbor
         ```
-        Similarity(C_new, C_old) = Σ (wᵢ × sim(fᵢ_new, fᵢ_old)) / Σ wᵢ
+        Similarity(C_new, C_old) = Sum(wi x sim(fi_new, fi_old)) / Sum(wi)
         ```
         di mana:
-        - **wᵢ** = bobot fitur ke-i (dari symptom weight)
-        - **sim(fᵢ)** = 1 jika gejala cocok, 0 jika tidak
-        - **Σ wᵢ** = total bobot semua fitur yang relevan
+        - **wi** = bobot fitur ke-i (dari symptom weight)
+        - **sim(fi)** = 1 jika gejala cocok, 0 jika tidak
+        - **Sum(wi)** = total bobot semua fitur yang relevan
 
         #### Kelebihan & Kekurangan
         | Kelebihan | Kekurangan |
@@ -1133,7 +1110,7 @@ def page_about():
 
     with tab_ref:
         st.markdown("""
-        ### 📖 Referensi
+        ### Referensi
 
         #### Buku & Jurnal Utama
         1. **Turban, E., Aronson, J.E., & Liang, T.P.** (2005). *Decision Support Systems
@@ -1156,21 +1133,31 @@ def page_about():
             - Referensi untuk penerapan CBR di sistem enterprise.
 
         #### Referensi Teknis (Printer Troubleshooting)
-        - HP Support — support.hp.com
-        - Canon Support — support.canon.com
-        - Epson Support — support.epson.net
-        - Brother Support — support.brother.com
-        - Microsoft Support — support.microsoft.com
+        """)
+        ref_urls = [
+            ("HP Printer Support", "https://support.hp.com/us-en/printer"),
+            ("HP Printing Errors", "https://support.hp.com/us-en/topic/printing-errors"),
+            ("Epson Printer Support", "https://epson.com/Support/Printers/sh/s1"),
+            ("Brother USA Support", "https://www.brother-usa.com/support"),
+            ("Samsung Support", "https://www.samsung.com/us/support/"),
+            ("Digital Trends - Common Printer Problems", "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"),
+            ("PrinterTesting.com", "https://www.printertesting.com/"),
+            ("Microsoft Learn - Print Spooler Reference", "https://learn.microsoft.com/en-us/windows/win32/printdocs/printing-and-print-spooler-reference"),
+            ("Microsoft Learn - Print Command", "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/print"),
+        ]
+        for label, url in ref_urls:
+            st.markdown(f"- **{label}**: [{url}]({url})")
 
+        st.markdown("""
         #### Teknologi yang Digunakan
-        - **Python** — python.org
-        - **Streamlit** — streamlit.io
+        - **Python** -- python.org
+        - **Streamlit** -- streamlit.io
         """)
 
 
-
+# ──────────────────────────────────────────────
 # Router
-
+# ──────────────────────────────────────────────
 pages = {
     "home": page_home,
     "rbr": page_rbr,

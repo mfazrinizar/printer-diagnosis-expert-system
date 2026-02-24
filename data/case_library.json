@@ -14,7 +14,11 @@
         "severity": "high",
         "outcome": "success",
         "date": "2025-06-15",
-        "technician_notes": "Adaptor internal terbakar akibat lonjakan listrik. Penggantian adaptor menyelesaikan masalah."
+        "technician_notes": "Adaptor internal terbakar akibat lonjakan listrik. Penggantian adaptor menyelesaikan masalah.",
+        "references": [
+            "https://support.hp.com/us-en/printer",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
     },
     {
         "case_id": "C002",
@@ -31,7 +35,11 @@
         "severity": "medium",
         "outcome": "success",
         "date": "2025-07-20",
-        "technician_notes": "Driver versi lama tidak kompatibel dengan Windows 11 22H2. Update driver ke versi 3.0 menyelesaikan masalah."
+        "technician_notes": "Driver versi lama tidak kompatibel dengan Windows 11 22H2. Update driver ke versi 3.0 menyelesaikan masalah.",
+        "references": [
+            "https://epson.com/Support/Printers/sh/s1",
+            "https://learn.microsoft.com/en-us/windows/win32/printdocs/printing-and-print-spooler-reference"
+        ]
     },
     {
         "case_id": "C003",
@@ -49,7 +57,11 @@
         "severity": "high",
         "outcome": "success",
         "date": "2025-08-10",
-        "technician_notes": "Printer tidak digunakan selama 3 bulan. Tinta mengering di head printer. Deep cleaning 4x berhasil menormalkan kembali."
+        "technician_notes": "Printer tidak digunakan selama 3 bulan. Tinta mengering di head printer. Deep cleaning 4x berhasil menormalkan kembali.",
+        "references": [
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/",
+            "https://www.printertesting.com/"
+        ]
     },
     {
         "case_id": "C004",
@@ -66,7 +78,11 @@
         "severity": "high",
         "outcome": "success",
         "date": "2025-09-05",
-        "technician_notes": "Roller utama sudah aus setelah pemakaian 3 tahun. Penggantian roller menyelesaikan masalah paper jam."
+        "technician_notes": "Roller utama sudah aus setelah pemakaian 3 tahun. Penggantian roller menyelesaikan masalah paper jam.",
+        "references": [
+            "https://www.brother-usa.com/support",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
     },
     {
         "case_id": "C005",
@@ -85,7 +101,11 @@
         "severity": "medium",
         "outcome": "success",
         "date": "2025-09-22",
-        "technician_notes": "Tinta sudah sangat rendah di semua warna. Reset counter dan pengisian ulang tinta menyelesaikan semua gejala."
+        "technician_notes": "Tinta sudah sangat rendah di semua warna. Reset counter dan pengisian ulang tinta menyelesaikan semua gejala.",
+        "references": [
+            "https://epson.com/Support/Printers/sh/s1",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
     },
     {
         "case_id": "C006",
@@ -103,7 +123,11 @@
         "severity": "medium",
         "outcome": "success",
         "date": "2025-10-01",
-        "technician_notes": "Firmware crash menyebabkan printer hang. Hard reset dan update firmware berhasil. Kabel USB juga perlu diganti."
+        "technician_notes": "Firmware crash menyebabkan printer hang. Hard reset dan update firmware berhasil. Kabel USB juga perlu diganti.",
+        "references": [
+            "https://support.hp.com/us-en/printer",
+            "https://support.hp.com/us-en/topic/printing-errors"
+        ]
     },
     {
         "case_id": "C007",
@@ -121,7 +145,11 @@
         "severity": "medium",
         "outcome": "success",
         "date": "2025-10-15",
-        "technician_notes": "Debu menumpuk di roller dan sensor kertas. Pembersihan menyelesaikan masalah tanpa perlu penggantian komponen."
+        "technician_notes": "Debu menumpuk di roller dan sensor kertas. Pembersihan menyelesaikan masalah tanpa perlu penggantian komponen.",
+        "references": [
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/",
+            "https://www.printertesting.com/"
+        ]
     },
     {
         "case_id": "C008",
@@ -137,7 +165,11 @@
         "severity": "high",
         "outcome": "success",
         "date": "2025-11-03",
-        "technician_notes": "Kabel power terputus di bagian dalam. Penggantian kabel menyelesaikan masalah."
+        "technician_notes": "Kabel power terputus di bagian dalam. Penggantian kabel menyelesaikan masalah.",
+        "references": [
+            "https://support.hp.com/us-en/printer",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
     },
     {
         "case_id": "C009",
@@ -155,7 +187,11 @@
         "severity": "high",
         "outcome": "success",
         "date": "2025-11-20",
-        "technician_notes": "Nozzle tersumbat di beberapa channel warna. Head cleaning 5x dan nozzle soak berhasil membuka semua channel."
+        "technician_notes": "Nozzle tersumbat di beberapa channel warna. Head cleaning 5x dan nozzle soak berhasil membuka semua channel.",
+        "references": [
+            "https://epson.com/Support/Printers/sh/s1",
+            "https://www.printertesting.com/"
+        ]
     },
     {
         "case_id": "C010",
@@ -171,6 +207,464 @@
         "severity": "low",
         "outcome": "success",
         "date": "2025-12-05",
-        "technician_notes": "WiFi module perlu di-reset setelah perubahan router. Reset network settings menyelesaikan masalah koneksi."
+        "technician_notes": "WiFi module perlu di-reset setelah perubahan router. Reset network settings menyelesaikan masalah koneksi.",
+        "references": [
+            "https://www.brother-usa.com/support",
+            "https://learn.microsoft.com/en-us/windows/win32/printdocs/printing-and-print-spooler-reference"
+        ]
+    },
+    {
+        "case_id": "C011",
+        "title": "HP LaserJet Pro lampu berkedip oranye terus menerus",
+        "description": "Printer HP LaserJet Pro M404dn lampu indikator berkedip oranye tanpa henti setelah penggantian toner baru. Printer tidak mau mencetak.",
+        "printer_type": "LaserJet",
+        "brand": "HP",
+        "symptoms": [
+            "B2",
+            "B9"
+        ],
+        "diagnosis": "Toner cartridge tidak dikenali oleh printer",
+        "solution": "Lepas dan pasang kembali toner cartridge. Pastikan seal pelindung sudah dilepas sepenuhnya. Jika menggunakan toner kompatibel, coba toner original HP.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2025-12-10",
+        "technician_notes": "Toner kompatibel tidak dikenali oleh chip printer. Penggantian dengan toner original menyelesaikan masalah.",
+        "references": [
+            "https://support.hp.com/us-en/topic/printing-errors",
+            "https://support.hp.com/us-en/printer"
+        ]
+    },
+    {
+        "case_id": "C012",
+        "title": "Epson L1110 mencetak halaman kosong",
+        "description": "Printer Epson L1110 menarik kertas dan memproses perintah cetak, tetapi hasil cetak keluar kosong tanpa tinta sama sekali.",
+        "printer_type": "InkJet",
+        "brand": "Epson",
+        "symptoms": [
+            "B6"
+        ],
+        "diagnosis": "Saluran tinta tersumbat total dari tanki ke head printer",
+        "solution": "Periksa selang tinta dari tangki ke head. Lakukan power cleaning melalui utility Epson. Jika tersumbat, gunakan syringe untuk mendorong tinta melalui selang.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2025-12-18",
+        "technician_notes": "Gelembung udara masuk ke selang tinta saat pengisian ulang yang tidak benar. Priming ulang menyelesaikan masalah.",
+        "references": [
+            "https://epson.com/Support/Printers/sh/s1",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C013",
+        "title": "Canon PIXMA tidak terdeteksi setelah ganti PC baru",
+        "description": "Printer Canon PIXMA TS3140 tidak terdeteksi pada PC baru dengan Windows 11. Kabel USB sudah dicoba beberapa macam.",
+        "printer_type": "InkJet",
+        "brand": "Canon",
+        "symptoms": [
+            "B3"
+        ],
+        "diagnosis": "Driver printer belum terinstal pada PC baru",
+        "solution": "Unduh dan instal driver Canon PIXMA TS3140 versi terbaru dari website resmi Canon. Pilih versi yang sesuai dengan Windows 11 64-bit.",
+        "severity": "low",
+        "outcome": "success",
+        "date": "2026-01-05",
+        "technician_notes": "PC baru belum memiliki driver printer. Instalasi driver dari website Canon menyelesaikan masalah dengan cepat.",
+        "references": [
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/",
+            "https://learn.microsoft.com/en-us/windows/win32/printdocs/printing-and-print-spooler-reference"
+        ]
+    },
+    {
+        "case_id": "C014",
+        "title": "Samsung Xpress laser printer kertas macet berulang",
+        "description": "Printer Samsung Xpress M2070 mengalami paper jam setiap kali mencetak lebih dari 5 halaman. Kertas kusut di area fuser.",
+        "printer_type": "LaserJet",
+        "brand": "Samsung",
+        "symptoms": [
+            "B7"
+        ],
+        "diagnosis": "Fuser unit overheat menyebabkan kertas melengkung dan macet",
+        "solution": "Biarkan printer dingin selama 30 menit. Bersihkan area fuser dari sisa kertas. Jika masalah berlanjut, fuser assembly perlu diganti.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2026-01-10",
+        "technician_notes": "Fuser assembly mengalami overheat karena continuous printing tanpa jeda. Penggantian fuser pad menyelesaikan masalah.",
+        "references": [
+            "https://www.samsung.com/us/support/",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
+    },
+    {
+        "case_id": "C015",
+        "title": "HP DeskJet 2700 mencetak garis horizontal",
+        "description": "Printer HP DeskJet 2700 mencetak dokumen dengan garis-garis horizontal tipis yang muncul secara berkala di seluruh halaman.",
+        "printer_type": "InkJet",
+        "brand": "HP",
+        "symptoms": [
+            "B8"
+        ],
+        "diagnosis": "Print head perlu alignment dan cleaning",
+        "solution": "Jalankan Print Head Alignment dari HP Smart app. Lakukan Clean Printhead dari menu maintenance. Jika masih bergaris, lakukan Deep Cleaning.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-01-15",
+        "technician_notes": "Print head sedikit bergeser setelah penggantian cartridge. Alignment dan cleaning menyelesaikan masalah garis.",
+        "references": [
+            "https://support.hp.com/us-en/printer",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C016",
+        "title": "Epson EcoTank tidak menyala dan lampu berkedip",
+        "description": "Printer Epson EcoTank L3250 tidak menyala secara normal, lampu power berkedip cepat 3 kali lalu mati.",
+        "printer_type": "InkJet",
+        "brand": "Epson",
+        "symptoms": [
+            "B1",
+            "B2"
+        ],
+        "diagnosis": "Mainboard printer mengalami short circuit",
+        "solution": "Lakukan hard reset dengan mencabut semua kabel selama 5 menit. Jika masih bermasalah, mainboard printer perlu diperiksa oleh teknisi resmi.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2026-01-20",
+        "technician_notes": "Kapasitor pada mainboard mengalami short circuit akibat kelembaban tinggi. Penggantian mainboard menyelesaikan masalah.",
+        "references": [
+            "https://epson.com/Support/Printers/sh/s1",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
+    },
+    {
+        "case_id": "C017",
+        "title": "Brother DCP cetak buram setelah lama tidak dipakai",
+        "description": "Printer Brother DCP-T310 mencetak dengan hasil sangat buram dan warna pudar setelah tidak digunakan selama 2 bulan.",
+        "printer_type": "InkJet",
+        "brand": "Brother",
+        "symptoms": [
+            "B5"
+        ],
+        "diagnosis": "Tinta mengering pada nozzle head printer",
+        "solution": "Lakukan head cleaning melalui menu maintenance printer. Cetak beberapa halaman test page untuk melancarkan aliran tinta. Gunakan printer minimal seminggu sekali untuk mencegah pengeringan.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-01-25",
+        "technician_notes": "Tinta mengering pada nozzle karena jarang digunakan. Head cleaning 3x dan pencetakan test page berhasil memperbaiki kualitas cetak.",
+        "references": [
+            "https://www.brother-usa.com/support",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C018",
+        "title": "Canon iP2770 tidak menarik kertas dari tray belakang",
+        "description": "Printer Canon iP2770 tidak dapat menarik kertas dari paper tray belakang. Motor terdengar berputar tapi kertas tidak bergerak.",
+        "printer_type": "InkJet",
+        "brand": "Canon",
+        "symptoms": [
+            "B4"
+        ],
+        "diagnosis": "Rubber roller penarik kertas sudah licin dan aus",
+        "solution": "Bersihkan roller dengan kain lembab yang dibasahi isopropyl alcohol. Jika roller sudah terlalu licin, bungkus dengan karet gelang tipis sebagai solusi sementara, atau ganti roller baru.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-01-28",
+        "technician_notes": "Roller yang licin diatasi dengan pembersihan menggunakan isopropyl alcohol. Perlu monitoring untuk penggantian roller jika aus kembali.",
+        "references": [
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C019",
+        "title": "HP OfficeJet Pro error dan tidak bisa cetak",
+        "description": "Printer HP OfficeJet Pro 8020 menampilkan pesan error 'Printhead Problem' pada layar LCD dan menolak semua perintah cetak.",
+        "printer_type": "InkJet",
+        "brand": "HP",
+        "symptoms": [
+            "B9",
+            "B6"
+        ],
+        "diagnosis": "Printhead bermasalah dan perlu dibersihkan atau diganti",
+        "solution": "Lepas dan pasang kembali printhead. Bersihkan kontak elektrik pada printhead dan carriage printer. Lakukan cleaning dari menu printer.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2026-02-01",
+        "technician_notes": "Kontak elektrik pada printhead terkena tinta yang mengering. Pembersihan kontak menyelesaikan error.",
+        "references": [
+            "https://support.hp.com/us-en/topic/printing-errors",
+            "https://support.hp.com/us-en/printer"
+        ]
+    },
+    {
+        "case_id": "C020",
+        "title": "Epson L120 kertas macet di tengah pencetakan",
+        "description": "Printer Epson L120 mengalami paper jam di tengah proses cetak. Kertas terlipat dan tersangkut di area roller bagian dalam.",
+        "printer_type": "InkJet",
+        "brand": "Epson",
+        "symptoms": [
+            "B7",
+            "B4"
+        ],
+        "diagnosis": "Kertas yang digunakan tidak sesuai spesifikasi dan roller kotor",
+        "solution": "Gunakan kertas ukuran A4 70-80gsm sesuai rekomendasi. Bersihkan roller penarik kertas. Jangan memasukkan kertas terlalu banyak ke tray.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-02-03",
+        "technician_notes": "Kertas 60gsm terlalu tipis menyebabkan paper jam. Penggantian ke kertas 80gsm dan pembersihan roller menyelesaikan masalah.",
+        "references": [
+            "https://epson.com/Support/Printers/sh/s1",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
+    },
+    {
+        "case_id": "C021",
+        "title": "Brother MFC tidak terdeteksi dan muncul error",
+        "description": "Printer Brother MFC-L2700DW tidak terdeteksi komputer dan menampilkan error 'Unable to connect to printer' saat mencoba mencetak.",
+        "printer_type": "LaserJet",
+        "brand": "Brother",
+        "symptoms": [
+            "B3",
+            "B9"
+        ],
+        "diagnosis": "Print spooler Windows bermasalah",
+        "solution": "Restart service Print Spooler melalui Services.msc. Hapus semua antrian cetak yang tertunda. Instal ulang printer melalui Settings > Devices > Printers.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-02-05",
+        "technician_notes": "Print spooler crash karena antrian cetak yang corrupt. Restart spooler dan clear queue menyelesaikan masalah.",
+        "references": [
+            "https://www.brother-usa.com/support",
+            "https://learn.microsoft.com/en-us/windows/win32/printdocs/printing-and-print-spooler-reference"
+        ]
+    },
+    {
+        "case_id": "C022",
+        "title": "Canon G4010 cetak buram dan muncul error tinta",
+        "description": "Printer Canon G4010 mencetak dengan kualitas buruk, warna pudar, sebagian tinta tidak keluar, dan muncul peringatan tinta pada software.",
+        "printer_type": "InkJet",
+        "brand": "Canon",
+        "symptoms": [
+            "B5",
+            "B6",
+            "B9"
+        ],
+        "diagnosis": "Level tinta rendah dan absorber pad hampir penuh",
+        "solution": "Isi ulang tangki tinta semua warna. Reset ink absorber counter melalui service mode. Jika diperlukan, ganti absorber pad.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-02-07",
+        "technician_notes": "Absorber pad counter sudah hampir penuh, menyebabkan warning dan pembatasan cetak. Reset counter dan pengisian tinta menyelesaikan masalah.",
+        "references": [
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C023",
+        "title": "HP LaserJet tidak menyala setelah petir",
+        "description": "Printer HP LaserJet Pro M102a tidak menyala sama sekali setelah sambaran petir yang menyebabkan listrik padam mendadak.",
+        "printer_type": "LaserJet",
+        "brand": "HP",
+        "symptoms": [
+            "B1"
+        ],
+        "diagnosis": "Fuse internal printer putus akibat lonjakan listrik",
+        "solution": "Periksa dan ganti fuse internal printer. Gunakan UPS atau surge protector untuk melindungi perangkat elektronik dari lonjakan listrik.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2026-02-08",
+        "technician_notes": "Fuse pada board power supply putus akibat surge. Penggantian fuse dengan rating yang sesuai menyelesaikan masalah.",
+        "references": [
+            "https://support.hp.com/us-en/printer",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
+    },
+    {
+        "case_id": "C024",
+        "title": "Samsung printer cetak bergaris setelah isi ulang toner",
+        "description": "Printer Samsung Xpress M2020W mencetak dengan garis-garis vertikal gelap di pinggir kertas setelah toner diisi ulang.",
+        "printer_type": "LaserJet",
+        "brand": "Samsung",
+        "symptoms": [
+            "B8"
+        ],
+        "diagnosis": "Drum cartridge tergores atau toner tumpah di area drum",
+        "solution": "Bersihkan drum cartridge dari sisa toner yang tumpah. Periksa permukaan drum apakah ada goresan. Jika drum tergores, ganti drum unit baru.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-02-09",
+        "technician_notes": "Toner tumpah ke permukaan drum saat proses refill yang kurang hati-hati. Pembersihan drum menyelesaikan masalah garis.",
+        "references": [
+            "https://www.samsung.com/us/support/",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C025",
+        "title": "Epson L5190 tidak terdeteksi via WiFi dan USB",
+        "description": "Printer Epson L5190 tidak bisa terhubung baik melalui WiFi maupun USB. Lampu WiFi tidak menyala dan komputer tidak mendeteksi perangkat.",
+        "printer_type": "InkJet",
+        "brand": "Epson",
+        "symptoms": [
+            "B3",
+            "B2"
+        ],
+        "diagnosis": "Board komunikasi printer bermasalah",
+        "solution": "Lakukan factory reset printer. Coba sambungkan melalui kabel USB yang berbeda. Jika masih tidak terdeteksi, board komunikasi perlu diperiksa teknisi.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2026-02-10",
+        "technician_notes": "IC komunikasi pada board rusak. Setelah factory reset tidak berhasil, penggantian board menyelesaikan masalah.",
+        "references": [
+            "https://epson.com/Support/Printers/sh/s1",
+            "https://learn.microsoft.com/en-us/windows/win32/printdocs/printing-and-print-spooler-reference"
+        ]
+    },
+    {
+        "case_id": "C026",
+        "title": "Brother HL kertas tidak ditarik dan muncul error",
+        "description": "Printer Brother HL-L2360DN tidak menarik kertas dari tray, motor penarik tidak berputar, dan muncul error 'No Paper' pada layar meskipun kertas sudah dimasukkan.",
+        "printer_type": "LaserJet",
+        "brand": "Brother",
+        "symptoms": [
+            "B4",
+            "B9"
+        ],
+        "diagnosis": "Sensor kertas tidak mendeteksi kertas di tray",
+        "solution": "Bersihkan sensor kertas dari debu menggunakan udara bertekanan. Periksa posisi guide kertas apakah sudah sesuai. Reset printer setelah pembersihan.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-02-11",
+        "technician_notes": "Sensor optik di paper tray tertutup debu sehingga tidak mendeteksi keberadaan kertas. Pembersihan sensor menyelesaikan masalah.",
+        "references": [
+            "https://www.brother-usa.com/support",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
+    },
+    {
+        "case_id": "C027",
+        "title": "HP ENVY cetak buram hanya di satu warna",
+        "description": "Printer HP ENVY 6020 mencetak dengan warna hitam normal tetapi semua warna lain (cyan, magenta, yellow) keluar sangat pudar dan buram.",
+        "printer_type": "InkJet",
+        "brand": "HP",
+        "symptoms": [
+            "B5",
+            "B8"
+        ],
+        "diagnosis": "Cartridge warna (tri-color) hampir habis atau tersumbat",
+        "solution": "Ganti cartridge tri-color. Jika sudah diganti tapi masih buram, lakukan cleaning printhead khusus untuk channel warna melalui HP Smart app.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-02-12",
+        "technician_notes": "Cartridge warna sudah sangat rendah tintanya. Penggantian cartridge baru langsung memperbaiki kualitas cetak warna.",
+        "references": [
+            "https://support.hp.com/us-en/printer",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C028",
+        "title": "Canon G2020 tinta tidak keluar setelah isi ulang",
+        "description": "Printer Canon G2020 tidak mengeluarkan tinta sama sekali setelah pengisian ulang tangki tinta. Kertas keluar bersih tanpa cetakan.",
+        "printer_type": "InkJet",
+        "brand": "Canon",
+        "symptoms": [
+            "B6"
+        ],
+        "diagnosis": "Gelembung udara masuk ke saluran tinta saat pengisian",
+        "solution": "Lakukan priming ulang dengan menekan tombol resume beberapa kali. Jalankan deep cleaning dari menu printer. Pastikan tidak ada udara terjebak di selang tinta.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-02-13",
+        "technician_notes": "Udara masuk ke head printer saat pengisian tinta yang terlalu cepat. Priming 3x dan deep cleaning mengembalikan aliran tinta normal.",
+        "references": [
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C029",
+        "title": "Epson L3210 muncul error dan hasil cetak bergaris",
+        "description": "Printer Epson L3210 menampilkan error 'ink pad is at the end of its service life' dan batas cetak bergaris horizontal di seluruh halaman.",
+        "printer_type": "InkJet",
+        "brand": "Epson",
+        "symptoms": [
+            "B8",
+            "B9"
+        ],
+        "diagnosis": "Ink absorber pad penuh dan head perlu cleaning",
+        "solution": "Reset ink absorber counter menggunakan Epson Adjustment Program. Ganti atau bersihkan absorber pad. Lakukan head cleaning untuk mengatasi garis.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2026-02-15",
+        "technician_notes": "Counter absorber pad sudah penuh sehingga printer menolak cetak. Reset counter dan pembersihan absorber pad menyelesaikan kedua masalah.",
+        "references": [
+            "https://epson.com/Support/Printers/sh/s1",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C030",
+        "title": "HP Smart Tank tidak menyala dan lampu indikator mati",
+        "description": "Printer HP Smart Tank 515 tidak menyala setelah dicabut dari listrik selama beberapa hari. Lampu indikator mati total, tidak ada respon.",
+        "printer_type": "InkJet",
+        "brand": "HP",
+        "symptoms": [
+            "B1",
+            "B2"
+        ],
+        "diagnosis": "Adaptor power supply mengalami kerusakan capacitor",
+        "solution": "Coba sambungkan dengan adaptor power supply lain yang kompatibel. Jika berhasil, ganti adaptor yang rusak dengan yang baru sesuai spesifikasi printer.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2026-02-18",
+        "technician_notes": "Capacitor electrolytic pada adaptor mengembung (bulging). Penggantian adaptor menyelesaikan masalah.",
+        "references": [
+            "https://support.hp.com/us-en/printer",
+            "https://support.hp.com/us-en/topic/printing-errors"
+        ]
+    },
+    {
+        "case_id": "C031",
+        "title": "Brother printer cetak buram bergaris dan garis",
+        "description": "Printer Brother DCP-T520W mencetak dokumen dengan kualitas buram, garis-garis vertikal, dan sebagian tinta tidak keluar pada area tertentu.",
+        "printer_type": "InkJet",
+        "brand": "Brother",
+        "symptoms": [
+            "B5",
+            "B6",
+            "B8"
+        ],
+        "diagnosis": "Head printer perlu deep cleaning karena tinta mengering",
+        "solution": "Lakukan deep cleaning bertahap dari menu maintenance printer. Cetak test page setelah setiap cleaning. Jika tidak membaik setelah 5x cleaning, lepas head dan rendam dalam cleaning solution.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2026-02-20",
+        "technician_notes": "Head printer mengalami pengeringan tinta pada beberapa channel. Deep cleaning 4x berhasil mengembalikan kualitas cetak normal.",
+        "references": [
+            "https://www.brother-usa.com/support",
+            "https://www.printertesting.com/"
+        ]
+    },
+    {
+        "case_id": "C032",
+        "title": "Samsung printer tidak menarik kertas tebal",
+        "description": "Printer Samsung Xpress C430W tidak bisa menarik kertas karton 200gsm dari tray. Kertas biasa 80gsm bisa ditarik normal.",
+        "printer_type": "LaserJet",
+        "brand": "Samsung",
+        "symptoms": [
+            "B4"
+        ],
+        "diagnosis": "Paper tray tidak dikonfigurasi untuk kertas tebal",
+        "solution": "Ubah pengaturan paper type ke 'Thick Paper' atau 'Cardstock' di driver printer. Sesuaikan guide kertas di tray. Masukkan kertas tebal lewat manual feed tray jika tersedia.",
+        "severity": "low",
+        "outcome": "success",
+        "date": "2026-02-21",
+        "technician_notes": "Setting paper type default adalah 'Plain Paper' yang tidak cocok untuk kertas tebal. Pengubahan setting ke 'Thick Paper' menyelesaikan masalah.",
+        "references": [
+            "https://www.samsung.com/us/support/",
+            "https://www.digitaltrends.com/computing/common-printer-problems-and-how-to-fix-them/"
+        ]
     }
 ]
