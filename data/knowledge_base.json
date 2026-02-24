@@ -1,45 +1,138 @@
 {
   "symptoms": [
-    {"code": "B1", "description": "Printer tidak menyala"},
-    {"code": "B2", "description": "Lampu indikator printer berkedip terus"},
-    {"code": "B3", "description": "Printer tidak terdeteksi di komputer"},
-    {"code": "B4", "description": "Printer tidak bisa menarik kertas"},
-    {"code": "B5", "description": "Hasil cetak buram atau tidak jelas"},
-    {"code": "B6", "description": "Tinta tidak keluar sama sekali"},
-    {"code": "B7", "description": "Kertas sering macet (paper jam)"},
-    {"code": "B8", "description": "Printer mencetak garis-garis"},
-    {"code": "B9", "description": "Muncul pesan error pada layar / software printer"}
+    {
+      "code": "B1",
+      "description": "Printer tidak menyala",
+      "category": "power",
+      "weight": 0.8
+    },
+    {
+      "code": "B2",
+      "description": "Lampu indikator printer berkedip terus",
+      "category": "power",
+      "weight": 0.6
+    },
+    {
+      "code": "B3",
+      "description": "Printer tidak terdeteksi di komputer",
+      "category": "connectivity",
+      "weight": 0.7
+    },
+    {
+      "code": "B4",
+      "description": "Printer tidak bisa menarik kertas",
+      "category": "mechanical",
+      "weight": 0.7
+    },
+    {
+      "code": "B5",
+      "description": "Hasil cetak buram atau tidak jelas",
+      "category": "print_quality",
+      "weight": 0.5
+    },
+    {
+      "code": "B6",
+      "description": "Tinta tidak keluar sama sekali",
+      "category": "print_quality",
+      "weight": 0.9
+    },
+    {
+      "code": "B7",
+      "description": "Kertas sering macet (paper jam)",
+      "category": "mechanical",
+      "weight": 0.6
+    },
+    {
+      "code": "B8",
+      "description": "Printer mencetak garis-garis",
+      "category": "print_quality",
+      "weight": 0.5
+    },
+    {
+      "code": "B9",
+      "description": "Muncul pesan error pada layar / software printer",
+      "category": "software",
+      "weight": 0.4
+    }
   ],
   "rules": [
     {
       "code": "A1",
-      "conditions": ["B1", "B2"],
+      "conditions": [
+        "B1",
+        "B2"
+      ],
       "diagnosis": "Kerusakan pada power supply",
-      "solution": "Periksa kabel power dan adaptor printer. Jika rusak, ganti dengan yang baru sesuai spesifikasi."
+      "category": "power",
+      "severity": "high",
+      "solution": "Periksa kabel power dan adaptor printer. Jika rusak, ganti dengan yang baru sesuai spesifikasi.",
+      "references": [
+        "HP Support - Printer Won't Turn On (support.hp.com)",
+        "Canon Troubleshoot - Power Issues (support.canon.com)"
+      ]
     },
     {
       "code": "A2",
-      "conditions": ["B3", "B9"],
+      "conditions": [
+        "B3",
+        "B9"
+      ],
       "diagnosis": "Driver printer belum terinstal / rusak",
-      "solution": "Unduh dan instal ulang driver printer dari website resmi produsen."
+      "category": "software",
+      "severity": "medium",
+      "solution": "Unduh dan instal ulang driver printer dari website resmi produsen. Pastikan versi driver sesuai dengan sistem operasi.",
+      "references": [
+        "Microsoft Support - Fix Printer Connection and Printing Problems in Windows (support.microsoft.com)",
+        "HP Support - Download & Install Drivers (support.hp.com)"
+      ]
     },
     {
       "code": "A3",
-      "conditions": ["B5", "B6", "B8", "B9"],
+      "conditions": [
+        "B5",
+        "B6",
+        "B8",
+        "B9"
+      ],
       "diagnosis": "Cartridge / tinta bermasalah",
-      "solution": "Ganti cartridge atau isi ulang tinta printer dengan tinta yang sesuai."
+      "category": "print_quality",
+      "severity": "medium",
+      "solution": "Ganti cartridge atau isi ulang tinta printer dengan tinta yang sesuai. Pastikan cartridge terpasang dengan benar.",
+      "references": [
+        "Epson Support - Replacing Ink Cartridges (support.epson.net)",
+        "Brother Support - Ink & Toner (support.brother.com)"
+      ]
     },
     {
       "code": "A4",
-      "conditions": ["B4", "B7"],
+      "conditions": [
+        "B4",
+        "B7"
+      ],
       "diagnosis": "Roller atau mekanik penarik kertas rusak",
-      "solution": "Bersihkan roller dengan lap lembab. Jika aus, ganti roller dengan yang baru."
+      "category": "mechanical",
+      "severity": "high",
+      "solution": "Bersihkan roller dengan lap lembab. Jika aus, ganti roller dengan yang baru. Pastikan kertas yang digunakan sesuai spesifikasi.",
+      "references": [
+        "HP Support - Paper Jam Issues (support.hp.com)",
+        "Canon Support - Paper Feeding Problems (support.canon.com)"
+      ]
     },
     {
       "code": "A5",
-      "conditions": ["B5", "B6", "B8"],
+      "conditions": [
+        "B5",
+        "B6",
+        "B8"
+      ],
       "diagnosis": "Head printer kotor atau rusak",
-      "solution": "Lakukan cleaning head melalui software printer. Jika masih bermasalah, bawa ke service center."
+      "category": "print_quality",
+      "severity": "high",
+      "solution": "Lakukan cleaning head melalui software printer. Jika masih bermasalah, bawa ke service center untuk penggantian head printer.",
+      "references": [
+        "Epson Support - Print Head Cleaning (support.epson.net)",
+        "HP Support - Printhead Maintenance (support.hp.com)"
+      ]
     }
   ]
 }

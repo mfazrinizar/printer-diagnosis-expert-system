@@ -1,0 +1,176 @@
+[
+    {
+        "case_id": "C001",
+        "title": "Printer HP LaserJet tidak menyala setelah mati lampu",
+        "description": "Printer HP LaserJet P1102 tiba-tiba tidak menyala setelah kejadian mati listrik. Lampu indikator berkedip sebentar lalu mati total.",
+        "printer_type": "LaserJet",
+        "brand": "HP",
+        "symptoms": [
+            "B1",
+            "B2"
+        ],
+        "diagnosis": "Kerusakan pada power supply akibat lonjakan listrik",
+        "solution": "Ganti adaptor power supply printer. Gunakan stabilizer atau UPS untuk mencegah kerusakan serupa di masa depan.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2025-06-15",
+        "technician_notes": "Adaptor internal terbakar akibat lonjakan listrik. Penggantian adaptor menyelesaikan masalah."
+    },
+    {
+        "case_id": "C002",
+        "title": "Printer Epson L3110 tidak terdeteksi setelah update Windows",
+        "description": "Printer Epson L3110 tidak muncul di daftar perangkat setelah update Windows 11. Muncul error 'Device not recognized'.",
+        "printer_type": "InkJet",
+        "brand": "Epson",
+        "symptoms": [
+            "B3",
+            "B9"
+        ],
+        "diagnosis": "Driver tidak kompatibel setelah update sistem operasi",
+        "solution": "Unduh driver terbaru dari website resmi Epson yang kompatibel dengan Windows 11. Lakukan uninstall driver lama terlebih dahulu.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2025-07-20",
+        "technician_notes": "Driver versi lama tidak kompatibel dengan Windows 11 22H2. Update driver ke versi 3.0 menyelesaikan masalah."
+    },
+    {
+        "case_id": "C003",
+        "title": "Hasil cetak Canon Pixma buram dan bergaris",
+        "description": "Printer Canon Pixma G2010 mencetak dokumen dengan hasil buram, bergaris-garis, dan beberapa bagian tinta tidak keluar.",
+        "printer_type": "InkJet",
+        "brand": "Canon",
+        "symptoms": [
+            "B5",
+            "B6",
+            "B8"
+        ],
+        "diagnosis": "Head printer tersumbat karena jarang digunakan",
+        "solution": "Lakukan deep cleaning head printer melalui software Canon IJ Printer Assistant. Ulangi 3-4 kali. Jika masih bermasalah, rendam head printer dalam cairan pembersih khusus.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2025-08-10",
+        "technician_notes": "Printer tidak digunakan selama 3 bulan. Tinta mengering di head printer. Deep cleaning 4x berhasil menormalkan kembali."
+    },
+    {
+        "case_id": "C004",
+        "title": "Kertas selalu macet di printer Brother",
+        "description": "Printer Brother DCP-T710W mengalami paper jam berulang. Kertas tidak ditarik dengan benar dan sering miring.",
+        "printer_type": "InkJet",
+        "brand": "Brother",
+        "symptoms": [
+            "B4",
+            "B7"
+        ],
+        "diagnosis": "Roller penarik kertas aus dan kotor",
+        "solution": "Bersihkan roller dengan isopropyl alcohol dan kain lembut. Roller sudah aus sehingga perlu diganti dengan yang baru.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2025-09-05",
+        "technician_notes": "Roller utama sudah aus setelah pemakaian 3 tahun. Penggantian roller menyelesaikan masalah paper jam."
+    },
+    {
+        "case_id": "C005",
+        "title": "Printer Epson L360 hasil cetak buram dan error",
+        "description": "Printer Epson L360 mencetak dengan hasil sangat buram, tinta tidak keluar merata, muncul garis horizontal, dan software menampilkan error cartridge.",
+        "printer_type": "InkJet",
+        "brand": "Epson",
+        "symptoms": [
+            "B5",
+            "B6",
+            "B8",
+            "B9"
+        ],
+        "diagnosis": "Cartridge tinta habis dan sensor cartridge error",
+        "solution": "Isi ulang semua tangki tinta. Reset counter tinta melalui Epson Adjustment Program. Bersihkan sensor cartridge.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2025-09-22",
+        "technician_notes": "Tinta sudah sangat rendah di semua warna. Reset counter dan pengisian ulang tinta menyelesaikan semua gejala."
+    },
+    {
+        "case_id": "C006",
+        "title": "HP DeskJet lampu berkedip dan tidak merespon",
+        "description": "Printer HP DeskJet 2135 menyala tapi lampu indikator terus berkedip dan tidak merespon perintah cetak. Tidak terdeteksi di komputer.",
+        "printer_type": "InkJet",
+        "brand": "HP",
+        "symptoms": [
+            "B2",
+            "B3",
+            "B9"
+        ],
+        "diagnosis": "Firmware printer crash dan koneksi USB bermasalah",
+        "solution": "Lakukan hard reset printer (cabut kabel power, tahan tombol power 30 detik). Update firmware melalui HP Smart app. Ganti kabel USB.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2025-10-01",
+        "technician_notes": "Firmware crash menyebabkan printer hang. Hard reset dan update firmware berhasil. Kabel USB juga perlu diganti."
+    },
+    {
+        "case_id": "C007",
+        "title": "Printer Canon tidak menarik kertas dan sering jam",
+        "description": "Printer Canon Pixma G3010 tidak bisa menarik kertas dari tray. Saat dipaksa, kertas macet di dalam printer.",
+        "printer_type": "InkJet",
+        "brand": "Canon",
+        "symptoms": [
+            "B4",
+            "B7",
+            "B9"
+        ],
+        "diagnosis": "Roller penarik kertas kotor dan sensor kertas error",
+        "solution": "Bersihkan roller penarik kertas. Bersihkan sensor kertas dari debu. Kalibrasi ulang paper feed melalui menu printer.",
+        "severity": "medium",
+        "outcome": "success",
+        "date": "2025-10-15",
+        "technician_notes": "Debu menumpuk di roller dan sensor kertas. Pembersihan menyelesaikan masalah tanpa perlu penggantian komponen."
+    },
+    {
+        "case_id": "C008",
+        "title": "Printer HP tidak menyala sama sekali",
+        "description": "Printer HP LaserJet Pro M15w tidak memberikan respon apapun saat tombol power ditekan. Tidak ada lampu yang menyala.",
+        "printer_type": "LaserJet",
+        "brand": "HP",
+        "symptoms": [
+            "B1"
+        ],
+        "diagnosis": "Kabel power putus atau soket rusak",
+        "solution": "Periksa dan ganti kabel power. Coba soket listrik yang berbeda. Jika masih tidak menyala, kemungkinan board power internal perlu diperiksa.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2025-11-03",
+        "technician_notes": "Kabel power terputus di bagian dalam. Penggantian kabel menyelesaikan masalah."
+    },
+    {
+        "case_id": "C009",
+        "title": "Epson L3150 cetak bergaris dan tinta tidak rata",
+        "description": "Printer Epson L3150 mencetak dengan garis-garis vertikal dan horizontal. Beberapa warna tidak keluar sama sekali.",
+        "printer_type": "InkJet",
+        "brand": "Epson",
+        "symptoms": [
+            "B5",
+            "B8",
+            "B6"
+        ],
+        "diagnosis": "Head printer kotor dengan nozzle tersumbat",
+        "solution": "Lakukan head cleaning 3-5 kali. Print nozzle check pattern untuk memonitor progress. Jika tidak membaik, lepas head dan rendam dalam cleaning solution selama 24 jam.",
+        "severity": "high",
+        "outcome": "success",
+        "date": "2025-11-20",
+        "technician_notes": "Nozzle tersumbat di beberapa channel warna. Head cleaning 5x dan nozzle soak berhasil membuka semua channel."
+    },
+    {
+        "case_id": "C010",
+        "title": "Brother printer tidak terdeteksi via WiFi",
+        "description": "Printer Brother MFC-T910DW tidak bisa ditemukan melalui koneksi WiFi. Koneksi USB masih berfungsi normal.",
+        "printer_type": "InkJet",
+        "brand": "Brother",
+        "symptoms": [
+            "B3"
+        ],
+        "diagnosis": "Modul WiFi printer perlu direset",
+        "solution": "Reset pengaturan jaringan printer ke factory default. Sambungkan ulang ke jaringan WiFi. Update firmware printer.",
+        "severity": "low",
+        "outcome": "success",
+        "date": "2025-12-05",
+        "technician_notes": "WiFi module perlu di-reset setelah perubahan router. Reset network settings menyelesaikan masalah koneksi."
+    }
+]
