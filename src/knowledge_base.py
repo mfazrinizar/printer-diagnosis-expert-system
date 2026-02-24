@@ -4,6 +4,8 @@ from typing import Optional
 
 
 class KnowledgeBase:
+    """Knowledge base loader untuk data gejala, aturan, dan kasus printer."""
+
     def __init__(self, json_path: str):
         self._data = self._load_data(json_path)
 
@@ -31,3 +33,19 @@ class KnowledgeBase:
             if rule["code"] == code:
                 return rule
         return None
+
+    def get_symptom_categories(self) -> list[str]:
+        categories = set()
+        for symptom in self.get_symptoms():
+            cat = symptom.get("category", "other")
+            categories.add(cat)
+        return sorted(list(categories))
+
+    def get_symptoms_by_category(self, category: str) -> list[dict]:
+        return [s for s in self.get_symptoms() if s.get("category") == category]
+
+    def get_symptom_weight(self, code: str) -> float:
+        symptom = self.get_symptom_by_code(code)
+        if symptom:
+            return symptom.get("weight", 0.5)
+        return 0.5
