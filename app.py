@@ -3,6 +3,7 @@ from pathlib import Path
 
 from src.knowledge_base import KnowledgeBase
 from src.rbr_engine import RBREngine
+from src.rbr_cf_engine import RBRCFEngine
 from src.cbr_engine import CBREngine
 
 # ──────────────────────────────────────────────
@@ -235,11 +236,12 @@ def load_engines():
     cl_path = base / "data" / "case_library.json"
     kb = KnowledgeBase(str(kb_path))
     rbr = RBREngine(kb)
+    rbr_cf = RBRCFEngine(kb)
     cbr = CBREngine(str(cl_path), kb)
-    return kb, rbr, cbr
+    return kb, rbr, rbr_cf, cbr
 
 
-kb, rbr_engine, cbr_engine = load_engines()
+kb, rbr_engine, rbr_cf_engine, cbr_engine = load_engines()
 
 
 def init_session():
@@ -248,6 +250,9 @@ def init_session():
         "rbr_answers": {},
         "rbr_step": 0,
         "rbr_finished": False,
+        "cf_answers": {},
+        "cf_step": 0,
+        "cf_finished": False,
         "cbr_selected": [],
         "cbr_results": None,
         "cbr_proposed": None,
@@ -334,6 +339,7 @@ with st.sidebar:
     menu_items = [
         ("Beranda", "home"),
         ("RBR -- Rule-Based", "rbr"),
+        ("RBR + Certainty Factor", "rbr_cf"),
         ("CBR -- Case-Based", "cbr"),
         ("Basis Pengetahuan", "knowledge"),
         ("Case Library", "cases"),
@@ -352,6 +358,7 @@ with st.sidebar:
     st.caption(f"**{len(kb.get_symptoms())}** Gejala terdaftar")
     st.caption(f"**{len(kb.get_rules())}** Aturan diagnosis")
     st.caption(f"**{stats.get('total_cases', 0)}** Kasus tersimpan")
+    st.caption(f"**3** Metode diagnosis")
 
 
 # ──────────────────────────────────────────────
@@ -391,35 +398,40 @@ def page_home():
     with c4:
         st.markdown(f"""
         <div class="metric-card">
-            <div class="metric-value">2</div>
+            <div class="metric-value">3</div>
             <div class="metric-label">Metode</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("")
 
-    # Method Cards -- side by side
+    # Method Cards -- 3 columns
     st.markdown("""
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1rem;">
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.25rem; margin-bottom:1rem;">
         <div class="method-card">
             <h3>Rule-Based Reasoning (RBR)</h3>
-            <p>Menggunakan <strong>Forward Chaining</strong> untuk mencocokkan gejala yang dialami pengguna
-            dengan aturan-aturan (IF-THEN rules) yang telah didefinisikan oleh pakar.</p>
+            <p>Menggunakan <strong>Forward Chaining</strong> untuk mencocokkan gejala
+            dengan aturan IF-THEN yang telah didefinisikan oleh pakar.</p>
             <p style="margin-top:0.75rem;"><span class="tag tag-primary">Forward Chaining</span>
-            <span class="tag tag-primary">AND Logic</span>
-            <span class="tag tag-primary">Exact Match</span></p>
+            <span class="tag tag-primary">AND Logic</span></p>
+        </div>
+        <div class="method-card">
+            <h3>RBR + Certainty Factor</h3>
+            <p>Menggunakan <strong>Certainty Factor (CF)</strong> untuk menangani
+            ketidakpastian dalam penalaran. User memberikan tingkat keyakinan per gejala.</p>
+            <p style="margin-top:0.75rem;"><span class="tag tag-medium">Certainty Factor</span>
+            <span class="tag tag-medium">Shortliffe &amp; Buchanan</span></p>
         </div>
         <div class="method-card">
             <h3>Case-Based Reasoning (CBR)</h3>
-            <p>Menggunakan <strong>siklus Retrieve-Reuse-Revise-Retain</strong> untuk mencari kasus serupa
-            di case library dan mengadaptasi solusinya untuk masalah saat ini.</p>
+            <p>Menggunakan <strong>siklus Retrieve-Reuse-Revise-Retain</strong> untuk
+            mencari kasus serupa dan mengadaptasi solusinya.</p>
             <p style="margin-top:0.75rem;"><span class="tag tag-accent">Nearest Neighbor</span>
-            <span class="tag tag-accent">Weighted Similarity</span>
-            <span class="tag tag-accent">Case Library</span></p>
+            <span class="tag tag-accent">Weighted Similarity</span></p>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    btn_col1, btn_col2 = st.columns(2)
+    btn_col1, btn_col2, btn_col3 = st.columns(3)
     with btn_col1:
         if st.button("Mulai Diagnosis RBR", key="home_rbr", use_container_width=True):
             st.session_state.page = "rbr"
@@ -428,6 +440,13 @@ def page_home():
             st.session_state.rbr_finished = False
             st.rerun()
     with btn_col2:
+        if st.button("Mulai Diagnosis RBR+CF", key="home_cf", use_container_width=True):
+            st.session_state.page = "rbr_cf"
+            st.session_state.cf_answers = {}
+            st.session_state.cf_step = 0
+            st.session_state.cf_finished = False
+            st.rerun()
+    with btn_col3:
         if st.button("Mulai Diagnosis CBR", key="home_cbr", use_container_width=True):
             st.session_state.page = "cbr"
             st.session_state.cbr_selected = []
@@ -573,14 +592,17 @@ def render_rbr_results():
     if exact_results:
         for r in exact_results:
             border_cls = 'result-card-danger' if r['severity'] == 'high' else ('result-card-warning' if r['severity'] == 'medium' else 'result-card-success')
+            cf_label = f'CF Pakar: {r["cf_expert"]}'
             st.markdown(
                 f'<div class="result-card {border_cls}">'
                 '<div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:0.5rem;">'
                 '<div>'
                 f'<h3 style="color: #f1f5f9; margin:0 0 0.25rem 0;">{r["diagnosis"]}</h3>'
-                f'<span style="color: #94a3b8; font-size: 0.85rem;">Kode: {r["code"]}</span>'
+                f'<span style="color: #94a3b8; font-size: 0.85rem;">Kode: {r["code"]} | '
+                f'MB = {r["mb"]}, MD = {r["md"]}, CF = MB - MD = {r["cf_expert"]}</span>'
                 '</div>'
-                f'<div>{severity_tag(r["severity"])} {category_tag(r["category"])}</div>'
+                f'<div>{severity_tag(r["severity"])} {category_tag(r["category"])} '
+                f'<span class="tag tag-medium">{cf_label}</span></div>'
                 '</div></div>',
                 unsafe_allow_html=True
             )
@@ -613,9 +635,11 @@ def render_rbr_results():
                     '<div>'
                     f'<h4 style="color: #f1f5f9; margin:0;">{r["diagnosis"]}</h4>'
                     f'<span style="color: #94a3b8; font-size: 0.85rem;">Kecocokan: {confidence_pct}% '
-                    f'({len(r["matched_conditions"])}/{r["total_conditions"]} kondisi)</span>'
+                    f'({len(r["matched_conditions"])}/{r["total_conditions"]} kondisi) | '
+                    f'CF Pakar: {r["cf_expert"]} (MB={r["mb"]}, MD={r["md"]})</span>'
                     '</div>'
-                    f'{severity_tag(r["severity"])}'
+                    f'{severity_tag(r["severity"])} '
+                    f'<span class="tag tag-medium">CF Pakar: {r["cf_expert"]}</span>'
                     '</div>'
                     f'{similarity_bar_html(r["confidence"])}'
                     '</div>'
@@ -643,7 +667,9 @@ def render_rbr_results():
             st.markdown(
                 f'<div class="trace-step {cls}">'
                 f'<strong>Langkah {t["step"]}</strong> -- Rule {t["rule_code"]}: {t["rule_diagnosis"]}<br/>'
-                f'<span style="color: #94a3b8;">Kondisi: {", ".join(t["conditions_required"])} | '
+                f'<span style="color: #94a3b8;">'
+                f'MB={t["mb"]}, MD={t["md"]}, CF Pakar={t["cf_expert"]}<br/>'
+                f'Kondisi: {", ".join(t["conditions_required"])} | '
                 f'Terpenuhi: {t["match_ratio"]} | {status_text}</span>'
                 '</div>',
                 unsafe_allow_html=True
@@ -655,6 +681,290 @@ def render_rbr_results():
         st.session_state.rbr_step = 0
         st.session_state.rbr_finished = False
         st.rerun()
+
+
+# ──────────────────────────────────────────────
+# PAGE: RBR + Certainty Factor
+# ──────────────────────────────────────────────
+def page_rbr_cf():
+    st.markdown("""
+    <div class="hero-banner" style="background: linear-gradient(135deg, #78350f, #a16207, #eab308);">
+        <h1>RBR + Certainty Factor (CF)</h1>
+        <p>Diagnosis menggunakan <strong>Forward Chaining</strong> dengan
+        <strong>Certainty Factor</strong> (Shortliffe &amp; Buchanan, 1975) --
+        user memberikan tingkat keyakinan untuk setiap gejala.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # CF explanation -- full MYCIN theory
+    st.markdown("""
+    <div class="info-box">
+        <h4 style="margin-top:0;">Formula Certainty Factor (MYCIN)</h4>
+        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.5rem;">
+        <strong>CF(H, E) = MB(H, E) - MD(H, E)</strong></p>
+        <p style="color: #94a3b8; font-size: 0.85rem;">
+        <strong>MB</strong> = Measure of Belief (ukuran kepercayaan pakar)<br/>
+        <strong>MD</strong> = Measure of Disbelief (ukuran ketidakpercayaan pakar)<br/>
+        <strong>CF(Rule)</strong> = MB - MD (ditetapkan oleh pakar)<br/>
+        <strong>CF(E)</strong> = min(CF user per gejala) untuk kondisi AND<br/>
+        <strong>CF(H, E)</strong> = CF(E) x CF(Rule)<br/>
+        <strong>CF Kombinasi</strong>: CF1 + CF2 x (1 - CF1) [keduanya positif]
+        </p>
+        <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.5rem;">
+        Skala nilai: <strong>-1.0</strong> (Pasti Tidak) sampai <strong>+1.0</strong> (Pasti)
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    symptoms = kb.get_symptoms()
+    total = len(symptoms)
+    step = st.session_state.cf_step
+
+    if st.session_state.cf_finished:
+        render_cf_results()
+        return
+
+    # Progress
+    answered = len(st.session_state.cf_answers)
+    progress = answered / total
+    st.progress(progress, text=f"Progress: {answered}/{total} gejala dinilai")
+
+    # Previous answers summary
+    if step > 0:
+        with st.expander(f"Jawaban sebelumnya ({step} pertanyaan)", expanded=False):
+            for i in range(step):
+                sym = symptoms[i]
+                code = sym["code"]
+                ans = st.session_state.cf_answers.get(code)
+                if ans is not None:
+                    label = next(
+                        (lbl for lbl, val in RBRCFEngine.USER_CF_OPTIONS if val == ans),
+                        f"CF={ans}"
+                    )
+                    st.caption(f"[CF={ans}] **{code}**: {sym['description']} -- {label}")
+
+    # Current question
+    if step < total:
+        current = symptoms[step]
+        cat_label = CATEGORY_MAP.get(current.get("category", "other"), "Lainnya")
+
+        st.markdown(
+            '<div style="background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid #334155;'
+            'border-radius: 16px; padding: 2rem; margin: 1rem 0;">'
+            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">'
+            f'<span style="color: #94a3b8; font-size: 0.85rem;">Pertanyaan {step + 1} dari {total}</span>'
+            f'<span class="tag tag-accent">{cat_label}</span>'
+            '</div>'
+            '<h3 style="color: #f1f5f9; margin: 0 0 0.5rem 0;">Seberapa yakin Anda printer mengalami gejala berikut?</h3>'
+            f'<p style="color: #c7d2fe; font-size: 1.15rem; font-weight: 600;">'
+            f'{current["code"]}: {current["description"]}'
+            '</p></div>',
+            unsafe_allow_html=True
+        )
+
+        # CF options -- selectbox with full uncertain terms scale
+        option_labels = [f"{opt[0]} (CF = {opt[1]:+.1f})" for opt in RBRCFEngine.USER_CF_OPTIONS]
+        option_values = [opt[1] for opt in RBRCFEngine.USER_CF_OPTIONS]
+
+        # Default to "Tidak Tahu (Netral)" which is index 5
+        selected_idx = st.selectbox(
+            "Pilih tingkat keyakinan:",
+            range(len(option_labels)),
+            format_func=lambda i: option_labels[i],
+            index=5,
+            key=f"cf_select_{step}",
+        )
+
+        col_submit, col_back, col_spacer = st.columns([1, 1, 2])
+        with col_submit:
+            if st.button("Simpan Jawaban", key=f"cf_submit_{step}", type="primary", use_container_width=True):
+                st.session_state.cf_answers[current["code"]] = option_values[selected_idx]
+                if step + 1 < total:
+                    st.session_state.cf_step += 1
+                else:
+                    st.session_state.cf_finished = True
+                st.rerun()
+        with col_back:
+            if step > 0:
+                if st.button("Kembali", key="cf_back", use_container_width=True):
+                    st.session_state.cf_step -= 1
+                    st.rerun()
+
+    # Reset
+    st.markdown("---")
+    if st.button("Reset Diagnosis CF", key="cf_reset"):
+        st.session_state.cf_answers = {}
+        st.session_state.cf_step = 0
+        st.session_state.cf_finished = False
+        st.rerun()
+
+
+def render_cf_results():
+    user_cf = st.session_state.cf_answers
+    symptoms = kb.get_symptoms()
+
+    # Summary of user inputs
+    st.markdown(
+        '<div style="background: rgba(234, 179, 8, 0.08); border: 1px solid rgba(234, 179, 8, 0.2);'
+        'border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">'
+        '<h4 style="margin-top:0; color: #fcd34d;">Ringkasan Input (Uncertain Terms)</h4>'
+        '<p style="color: #94a3b8;">Berikut nilai CF yang Anda berikan untuk setiap gejala '
+        '(skala -1.0 sampai +1.0):</p>'
+        '</div>',
+        unsafe_allow_html=True
+    )
+
+    # CF input table
+    input_data = []
+    for sym in symptoms:
+        code = sym["code"]
+        cf_val = user_cf.get(code, 0.0)
+        label = next(
+            (lbl for lbl, val in RBRCFEngine.USER_CF_OPTIONS if val == cf_val),
+            f"CF={cf_val}"
+        )
+        input_data.append({
+            "Kode": code,
+            "Gejala": sym["description"],
+            "Uncertain Term": label,
+            "CF User": cf_val,
+        })
+    st.dataframe(input_data, use_container_width=True, hide_index=True)
+
+    # Calculate CF results
+    results = rbr_cf_engine.calculate_cf(user_cf)
+
+    st.markdown("### Hasil Diagnosis (Certainty Factor)")
+
+    if not results:
+        st.warning("Tidak ada diagnosis dengan nilai CF > 0. "
+                    "Coba berikan tingkat keyakinan yang lebih tinggi untuk gejala yang dialami.")
+    else:
+        for r in results:
+            cf_final = r["cf_final"]
+            cf_label = rbr_cf_engine.cf_to_label(cf_final)
+
+            if cf_final >= 0.6:
+                border_cls = "result-card-success"
+            elif cf_final >= 0.4:
+                border_cls = "result-card-warning"
+            else:
+                border_cls = "result-card"
+
+            result_card = (
+                f'<div class="result-card {border_cls}">'
+                '<div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:0.5rem;">'
+                '<div>'
+                f'<h3 style="color: #f1f5f9; margin:0 0 0.25rem 0;">{r["diagnosis"]}</h3>'
+                f'<span style="color: #94a3b8; font-size: 0.85rem;">'
+                f'{len(r["contributing_rules"])} rule berkontribusi</span>'
+                '</div>'
+                '<div>'
+                f'{severity_tag(r["severity"])}'
+                f'<span class="tag tag-medium">CF: {cf_final:.4f} ({cf_label})</span>'
+                '</div>'
+                '</div>'
+                '<div style="margin-top: 0.75rem;">'
+                '<strong style="color: #fcd34d;">Certainty Factor:</strong>'
+                '</div>'
+                f'{similarity_bar_html(max(0, cf_final))}'
+                '</div>'
+            )
+            st.markdown(result_card, unsafe_allow_html=True)
+
+            st.info(f"**Solusi:** {r['solution']}")
+
+            # Detail per contributing rule -- with MB and MD
+            with st.expander(f"Detail perhitungan CF -- {r['diagnosis']}"):
+                for idx, rule in enumerate(r["contributing_rules"]):
+                    st.markdown(
+                        f"**Rule {rule['rule_code']}** -- "
+                        f"MB = {rule['mb_expert']}, MD = {rule['md_expert']}, "
+                        f"CF(Rule) = MB - MD = **{rule['cf_expert']}**"
+                    )
+
+                    # Condition details
+                    cond_data = []
+                    for c in rule["conditions"]:
+                        user_label = next(
+                            (lbl for lbl, val in RBRCFEngine.USER_CF_OPTIONS if val == c["user_cf"]),
+                            str(c["user_cf"])
+                        )
+                        cond_data.append({
+                            "Kode": c["code"],
+                            "Gejala": c["description"],
+                            "CF User": c["user_cf"],
+                            "Uncertain Term": user_label,
+                        })
+                    st.dataframe(cond_data, use_container_width=True, hide_index=True)
+
+                    cf_vals = ", ".join(str(c["user_cf"]) for c in rule["conditions"])
+                    st.markdown(
+                        f"- **CF Evidence** = min({cf_vals}) = **{rule['cf_evidence']}**"
+                    )
+                    st.markdown(
+                        f"- **CF(H, E)** = CF(E) x CF(Rule) = "
+                        f"{rule['cf_evidence']} x {rule['cf_expert']} "
+                        f"= **{rule['cf_result']:.4f}**"
+                    )
+                    st.markdown("---")
+
+                if len(r["contributing_rules"]) > 1:
+                    st.markdown("**Kombinasi CF (beberapa rule --> diagnosis sama):**")
+                    cf1 = r["contributing_rules"][0]["cf_result"]
+                    cf2 = r["contributing_rules"][1]["cf_result"]
+                    if cf1 >= 0 and cf2 >= 0:
+                        formula_text = f"CF1 + CF2 x (1 - CF1) = {cf1:.4f} + {cf2:.4f} x (1 - {cf1:.4f})"
+                    elif cf1 < 0 and cf2 < 0:
+                        formula_text = f"CF1 + CF2 x (1 + CF1) = {cf1:.4f} + {cf2:.4f} x (1 + {cf1:.4f})"
+                    else:
+                        formula_text = f"(CF1 + CF2) / (1 - min(|CF1|, |CF2|))"
+                    st.markdown(
+                        f"- {formula_text}\n"
+                        f"- CF Final = **{r['cf_final']:.4f}** ({rbr_cf_engine.cf_to_label(r['cf_final'])})"
+                    )
+
+            # References
+            if r.get("references"):
+                with st.expander(f"Referensi ({len(r['references'])})"):
+                    for ref in r["references"]:
+                        st.markdown(f"[{ref}]({ref})")
+
+    # Inference Trace
+    st.markdown("### Jejak Inferensi (CF Trace)")
+    with st.expander("Lihat detail proses perhitungan CF per rule", expanded=False):
+        trace = rbr_cf_engine.get_inference_trace(user_cf)
+        for t in trace:
+            cls = "trace-fired" if t["fired"] else "trace-not-fired"
+            if t["fired"]:
+                status_text = f'CF = {t["cf_result"]:.4f}'
+            else:
+                status_text = f'CF = {t["cf_result"]:.4f} (tidak terpicu)'
+
+            # Build condition summary
+            cond_summary = " | ".join(
+                f'{c["code"]}={c["user_cf"]:+.1f}' for c in t["conditions"]
+            )
+
+            st.markdown(
+                f'<div class="trace-step {cls}">'
+                f'<strong>Langkah {t["step"]}</strong> -- Rule {t["rule_code"]}: {t["diagnosis"]}<br/>'
+                f'<span style="color: #94a3b8;">'
+                f'MB={t["mb_expert"]}, MD={t["md_expert"]} --> {t["formula_mb_md"]}<br/>'
+                f'Gejala: [{cond_summary}]<br/>'
+                f'{t["formula_cf"]}<br/>'
+                f'Hasil: {status_text}</span>'
+                '</div>',
+                unsafe_allow_html=True
+            )
+
+    st.markdown("---")
+    if st.button("Mulai Diagnosis Baru", type="primary", key="cf_restart"):
+        st.session_state.cf_answers = {}
+        st.session_state.cf_step = 0
+        st.session_state.cf_finished = False
+        st.rerun()
+
 
 
 # ──────────────────────────────────────────────
@@ -1158,6 +1468,7 @@ def page_about():
 pages = {
     "home": page_home,
     "rbr": page_rbr,
+    "rbr_cf": page_rbr_cf,
     "cbr": page_cbr,
     "knowledge": page_knowledge,
     "cases": page_cases,

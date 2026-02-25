@@ -65,6 +65,8 @@
       "diagnosis": "Kerusakan pada power supply",
       "category": "power",
       "severity": "high",
+      "mb": 0.95,
+      "md": 0.05,
       "solution": "Periksa kabel power dan adaptor printer. Jika rusak, ganti dengan yang baru sesuai spesifikasi.",
       "references": [
         "https://support.hp.com/us-en/printer",
@@ -80,6 +82,8 @@
       "diagnosis": "Driver printer belum terinstal / rusak",
       "category": "software",
       "severity": "medium",
+      "mb": 0.90,
+      "md": 0.10,
       "solution": "Unduh dan instal ulang driver printer dari website resmi produsen. Pastikan versi driver sesuai dengan sistem operasi.",
       "references": [
         "https://learn.microsoft.com/en-us/windows/win32/printdocs/printing-and-print-spooler-reference",
@@ -97,6 +101,8 @@
       "diagnosis": "Cartridge / tinta bermasalah",
       "category": "print_quality",
       "severity": "medium",
+      "mb": 0.92,
+      "md": 0.07,
       "solution": "Ganti cartridge atau isi ulang tinta printer dengan tinta yang sesuai. Pastikan cartridge terpasang dengan benar.",
       "references": [
         "https://epson.com/Support/Printers/sh/s1",
@@ -112,6 +118,8 @@
       "diagnosis": "Roller atau mekanik penarik kertas rusak",
       "category": "mechanical",
       "severity": "high",
+      "mb": 0.92,
+      "md": 0.07,
       "solution": "Bersihkan roller dengan lap lembab. Jika aus, ganti roller dengan yang baru. Pastikan kertas yang digunakan sesuai spesifikasi.",
       "references": [
         "https://www.brother-usa.com/support",
@@ -128,6 +136,8 @@
       "diagnosis": "Head printer kotor atau rusak",
       "category": "print_quality",
       "severity": "high",
+      "mb": 0.85,
+      "md": 0.10,
       "solution": "Lakukan cleaning head melalui software printer. Jika masih bermasalah, bawa ke service center untuk penggantian head printer.",
       "references": [
         "https://www.printertesting.com/",

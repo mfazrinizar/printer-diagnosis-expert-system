@@ -53,6 +53,10 @@ class RBREngine:
                             "description": symptom["description"]
                         })
 
+                mb = rule.get("mb", 1.0)
+                md = rule.get("md", 0.0)
+                cf_expert = round(mb - md, 4)
+
                 results.append({
                     "code": rule["code"],
                     "diagnosis": rule["diagnosis"],
@@ -62,6 +66,9 @@ class RBREngine:
                     "references": rule.get("references", []),
                     "matched_conditions": rule["conditions"],
                     "matched_details": matched_details,
+                    "mb": mb,
+                    "md": md,
+                    "cf_expert": cf_expert,
                     "confidence": 1.0,
                     "match_type": "exact"
                 })
@@ -110,6 +117,10 @@ class RBREngine:
                             "description": symptom["description"]
                         })
 
+                mb = rule.get("mb", 1.0)
+                md = rule.get("md", 0.0)
+                cf_expert = round(mb - md, 4)
+
                 results.append({
                     "code": rule["code"],
                     "diagnosis": rule["diagnosis"],
@@ -121,6 +132,9 @@ class RBREngine:
                     "matched_details": matched_details,
                     "unmatched_conditions": list(unmatched),
                     "unmatched_details": unmatched_details,
+                    "mb": mb,
+                    "md": md,
+                    "cf_expert": cf_expert,
                     "confidence": round(confidence, 2),
                     "total_conditions": len(conditions),
                     "match_type": "partial"
@@ -150,6 +164,10 @@ class RBREngine:
             matched = conditions.intersection(selected_set)
             is_fired = conditions.issubset(selected_set)
 
+            mb = rule.get("mb", 1.0)
+            md = rule.get("md", 0.0)
+            cf_expert = round(mb - md, 4)
+
             step = {
                 "step": i,
                 "rule_code": rule["code"],
@@ -158,6 +176,9 @@ class RBREngine:
                 "conditions_matched": list(matched),
                 "conditions_unmatched": list(conditions - matched),
                 "match_ratio": f"{len(matched)}/{len(conditions)}",
+                "mb": mb,
+                "md": md,
+                "cf_expert": cf_expert,
                 "fired": is_fired,
                 "status": "FIRE" if is_fired else f"TIDAK FIRE ({len(matched)}/{len(conditions)} terpenuhi)"
             }
