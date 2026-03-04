@@ -696,25 +696,17 @@ def page_rbr_cf():
     </div>
     """, unsafe_allow_html=True)
 
-    # CF explanation -- full MYCIN theory
-    st.markdown("""
-    <div class="info-box">
-        <h4 style="margin-top:0;">Formula Certainty Factor (MYCIN)</h4>
-        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.5rem;">
-        <strong>CF(H, E) = MB(H, E) - MD(H, E)</strong></p>
-        <p style="color: #94a3b8; font-size: 0.85rem;">
-        <strong>MB</strong> = Measure of Belief (ukuran kepercayaan pakar)<br/>
-        <strong>MD</strong> = Measure of Disbelief (ukuran ketidakpercayaan pakar)<br/>
-        <strong>CF(Rule)</strong> = MB - MD (ditetapkan oleh pakar)<br/>
-        <strong>CF(E)</strong> = min(CF user per gejala) untuk kondisi AND<br/>
-        <strong>CF(H, E)</strong> = CF(E) x CF(Rule)<br/>
-        <strong>CF Kombinasi</strong>: CF1 + CF2 x (1 - CF1) [keduanya positif]
-        </p>
-        <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.5rem;">
-        Skala nilai: <strong>-1.0</strong> (Pasti Tidak) sampai <strong>+1.0</strong> (Pasti)
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    # CF explanation -- full MYCIN theory with LaTeX
+    st.markdown("#### Formula Certainty Factor (MYCIN)")
+    st.latex(r"CF(H, E) = MB(H, E) - MD(H, E)")
+    st.caption("di mana **MB** = Measure of Belief, **MD** = Measure of Disbelief")
+    st.latex(r"CF(\text{Rule}) = MB - MD \quad \text{(ditetapkan oleh pakar)}")
+    st.latex(r"CF(E) = \min\bigl(CF(E_1),\; CF(E_2),\; \dots,\; CF(E_n)\bigr) \quad \text{[AND logic]}")
+    st.latex(r"CF(H, E) = CF(E) \times CF(\text{Rule})")
+    st.markdown("**Kombinasi** (jika dua rule menghasilkan diagnosis sama):")
+    st.latex(r"""CF_{\text{combine}} = \begin{cases} CF_1 + CF_2 \times (1 - CF_1) & \text{jika } CF_1 \geq 0 \text{ dan } CF_2 \geq 0 \\ CF_1 + CF_2 \times (1 + CF_1) & \text{jika } CF_1 < 0 \text{ dan } CF_2 < 0 \\ \dfrac{CF_1 + CF_2}{1 - \min(|CF_1|, |CF_2|)} & \text{lainnya} \end{cases}""")
+    st.caption("Skala nilai: **-1.0** (Pasti Tidak) sampai **+1.0** (Pasti)")
+
 
     symptoms = kb.get_symptoms()
     total = len(symptoms)
@@ -874,13 +866,12 @@ def render_cf_results():
 
             st.info(f"**Solusi:** {r['solution']}")
 
-            # Detail per contributing rule -- with MB and MD
+            # Detail per contributing rule -- with MB and MD (LaTeX)
             with st.expander(f"Detail perhitungan CF -- {r['diagnosis']}"):
                 for idx, rule in enumerate(r["contributing_rules"]):
-                    st.markdown(
-                        f"**Rule {rule['rule_code']}** -- "
-                        f"MB = {rule['mb_expert']}, MD = {rule['md_expert']}, "
-                        f"CF(Rule) = MB - MD = **{rule['cf_expert']}**"
+                    st.markdown(f"**Rule {rule['rule_code']}**")
+                    st.latex(
+                        rf"CF(\text{{Rule}}) = MB - MD = {rule['mb_expert']} - {rule['md_expert']} = {rule['cf_expert']}"
                     )
 
                     # Condition details
@@ -898,14 +889,12 @@ def render_cf_results():
                         })
                     st.dataframe(cond_data, use_container_width=True, hide_index=True)
 
-                    cf_vals = ", ".join(str(c["user_cf"]) for c in rule["conditions"])
-                    st.markdown(
-                        f"- **CF Evidence** = min({cf_vals}) = **{rule['cf_evidence']}**"
+                    cf_vals_latex = ",\\; ".join(str(c["user_cf"]) for c in rule["conditions"])
+                    st.latex(
+                        rf"CF(E) = \min({cf_vals_latex}) = {rule['cf_evidence']}"
                     )
-                    st.markdown(
-                        f"- **CF(H, E)** = CF(E) x CF(Rule) = "
-                        f"{rule['cf_evidence']} x {rule['cf_expert']} "
-                        f"= **{rule['cf_result']:.4f}**"
+                    st.latex(
+                        rf"CF(H, E) = CF(E) \times CF(\text{{Rule}}) = {rule['cf_evidence']} \times {rule['cf_expert']} = \mathbf{{{rule['cf_result']:.4f}}}"
                     )
                     st.markdown("---")
 
@@ -914,15 +903,18 @@ def render_cf_results():
                     cf1 = r["contributing_rules"][0]["cf_result"]
                     cf2 = r["contributing_rules"][1]["cf_result"]
                     if cf1 >= 0 and cf2 >= 0:
-                        formula_text = f"CF1 + CF2 x (1 - CF1) = {cf1:.4f} + {cf2:.4f} x (1 - {cf1:.4f})"
+                        st.latex(
+                            rf"CF_{{\text{{combine}}}} = CF_1 + CF_2 \times (1 - CF_1) = {cf1:.4f} + {cf2:.4f} \times (1 - {cf1:.4f}) = \mathbf{{{r['cf_final']:.4f}}}"
+                        )
                     elif cf1 < 0 and cf2 < 0:
-                        formula_text = f"CF1 + CF2 x (1 + CF1) = {cf1:.4f} + {cf2:.4f} x (1 + {cf1:.4f})"
+                        st.latex(
+                            rf"CF_{{\text{{combine}}}} = CF_1 + CF_2 \times (1 + CF_1) = {cf1:.4f} + {cf2:.4f} \times (1 + {cf1:.4f}) = \mathbf{{{r['cf_final']:.4f}}}"
+                        )
                     else:
-                        formula_text = f"(CF1 + CF2) / (1 - min(|CF1|, |CF2|))"
-                    st.markdown(
-                        f"- {formula_text}\n"
-                        f"- CF Final = **{r['cf_final']:.4f}** ({rbr_cf_engine.cf_to_label(r['cf_final'])})"
-                    )
+                        st.latex(
+                            rf"CF_{{\text{{combine}}}} = \frac{{CF_1 + CF_2}}{{1 - \min(|CF_1|, |CF_2|)}} = \frac{{{cf1:.4f} + {cf2:.4f}}}{{1 - \min(|{cf1:.4f}|, |{cf2:.4f}|)}} = \mathbf{{{r['cf_final']:.4f}}}"
+                        )
+                    st.caption(f"Label: **{rbr_cf_engine.cf_to_label(r['cf_final'])}**")
 
             # References
             if r.get("references"):
@@ -1103,32 +1095,63 @@ def render_cbr_results():
                 for ref in case_refs:
                     st.markdown(f"- [{ref}]({ref})")
 
-            # Similarity breakdown
+            # Similarity breakdown -- detailed WNN calculation with LaTeX
             st.markdown("**Detail Perhitungan Similarity (Weighted Nearest Neighbor):**")
             breakdown = cbr_engine.get_similarity_breakdown(selected, case)
+            features = breakdown["features"]
+            total_wm = breakdown["total_weighted_match"]
+            total_w = breakdown["total_weight"]
+            sim_result = breakdown["similarity"]
+
+            # Formula WNN in LaTeX
+            st.latex(
+                r"Similarity(C_{new}, C_{old}) = \frac{\sum_{i=1}^{n} w_i \times sim(f_i)}{\sum_{i=1}^{n} w_i}"
+            )
+            st.caption("di mana **sim(f_i) = 1** jika gejala cocok di kedua kasus, **0** jika tidak. **w_i** = bobot gejala dari knowledge base.")
 
             bd_data = []
-            for b in breakdown:
+            for b in features:
                 bd_data.append({
                     "Kode": b["code"],
                     "Gejala": b["description"],
-                    "Bobot (wi)": b["weight"],
-                    "Kasus Baru": "V" if b["in_new_case"] else "X",
-                    "Kasus Lama": "V" if b["in_old_case"] else "X",
-                    "Match": "V" if b["matched"] else "X",
-                    "Kontribusi": f"{b['contribution']:.4f}"
+                    "w_i (Bobot)": b["weight"],
+                    "Kasus Baru": "Ya" if b["in_new_case"] else "Tidak",
+                    "Kasus Lama": "Ya" if b["in_old_case"] else "Tidak",
+                    "sim(f_i)": b["sim_fi"],
+                    "w_i x sim(f_i)": b["wi_x_sim"],
                 })
             st.dataframe(bd_data, use_container_width=True, hide_index=True)
 
-            total_sim = case["similarity"]
-            st.markdown(
-                '<div style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.2);'
-                'border-radius: 8px; padding: 0.75rem; margin-top: 0.5rem;">'
-                '<strong style="color: #67e8f9;">Formula:</strong>'
-                f'<span style="color: #e2e8f0;"> Similarity = Sum(wi x match_i) / Sum(wi) = '
-                f'<strong>{total_sim:.4f}</strong> ({sim_pct}%)</span></div>',
-                unsafe_allow_html=True
+            # Build LaTeX step-by-step calculation
+            num_latex_parts = []
+            for b in features:
+                num_latex_parts.append(f"({b['weight']} \\times {b['sim_fi']})")
+            numerator_latex = " + ".join(num_latex_parts)
+
+            denom_latex_parts = [str(b["weight"]) for b in features]
+            denominator_latex = " + ".join(denom_latex_parts)
+
+            val_latex_parts = [str(b["wi_x_sim"]) for b in features]
+            values_latex = " + ".join(val_latex_parts)
+
+            sim_pct_val = int(sim_result * 100)
+
+            st.markdown("**Langkah Perhitungan:**")
+
+            st.markdown("**1.** Hitung $w_i \\times sim(f_i)$ per gejala:")
+            st.latex(numerator_latex)
+
+            st.markdown("**2.** Jumlahkan numerator $\\sum w_i \\times sim(f_i)$:")
+            st.latex(rf"= {values_latex} = {total_wm}")
+
+            st.markdown("**3.** Jumlahkan denominator $\\sum w_i$:")
+            st.latex(rf"= {denominator_latex} = {total_w}")
+
+            st.markdown("**4.** Hitung Similarity:")
+            st.latex(
+                rf"Similarity = \frac{{\sum w_i \times sim(f_i)}}{{\sum w_i}} = \frac{{{total_wm}}}{{{total_w}}} = \mathbf{{{sim_result:.4f}}} \;\; ({sim_pct_val}\%)"
             )
+
 
     # Step 3: Revise & Retain
     st.markdown("---")

@@ -211,24 +211,31 @@ class CBREngine:
 
         return next_id
 
-    def get_similarity_breakdown(self, new_symptoms: list[str], case: dict) -> list[dict]:
+    def get_similarity_breakdown(self, new_symptoms: list[str], case: dict) -> dict:
         """
-        Mengembalikan breakdown detail perhitungan similarity per gejala.
+        Mengembalikan breakdown detail perhitungan similarity per gejala
+        beserta total numerator dan denominator untuk formula WNN.
 
-        Berguna untuk transparansi proses CBR ke user.
+        Formula WNN:
+            Similarity(C_new, C_old) = Σ (w_i * sim(f_i)) / Σ w_i
 
         Args:
             new_symptoms: Gejala kasus baru.
             case: Kasus dari library.
 
         Returns:
-            List detail per fitur: kode, deskripsi, bobot, status match, kontribusi.
+            Dict berisi:
+            - "features": list detail per fitur
+            - "total_weighted_match": Σ (w_i * sim_i) -- numerator
+            - "total_weight": Σ w_i -- denominator
+            - "similarity": hasil akhir
         """
         case_symptoms = case.get("symptoms", [])
         all_codes = sorted(set(new_symptoms) | set(case_symptoms))
-        breakdown = []
+        features = []
 
-        total_weight = sum(self._kb.get_symptom_weight(c) for c in all_codes)
+        total_weighted_match = 0.0
+        total_weight = 0.0
 
         for code in all_codes:
             symptom = self._kb.get_symptom_by_code(code)
@@ -236,19 +243,32 @@ class CBREngine:
             in_new = code in new_symptoms
             in_case = code in case_symptoms
             matched = in_new and in_case
-            contribution = (weight / total_weight) if matched and total_weight > 0 else 0.0
 
-            breakdown.append({
+            sim_fi = 1 if matched else 0
+            wi_x_sim = weight * sim_fi
+
+            total_weighted_match += wi_x_sim
+            total_weight += weight
+
+            features.append({
                 "code": code,
                 "description": symptom["description"] if symptom else code,
                 "weight": weight,
                 "in_new_case": in_new,
                 "in_old_case": in_case,
                 "matched": matched,
-                "contribution": round(contribution, 4)
+                "sim_fi": sim_fi,
+                "wi_x_sim": round(wi_x_sim, 4),
             })
 
-        return breakdown
+        similarity = round(total_weighted_match / total_weight, 4) if total_weight > 0 else 0.0
+
+        return {
+            "features": features,
+            "total_weighted_match": round(total_weighted_match, 4),
+            "total_weight": round(total_weight, 4),
+            "similarity": similarity,
+        }
 
     def get_case_statistics(self) -> dict:
         """Statistik ringkasan dari case library."""
